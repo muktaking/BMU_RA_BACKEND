@@ -4,7 +4,7 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Researcher } from './researcher.entity';
 import { to } from 'src/utils/utils';
 import { CreateResearcherDto } from './dto/create-researcher.dto';
@@ -37,6 +37,23 @@ export class ResearchersService {
     if (err)
       throw new InternalServerErrorException(
         `Researcher of ${id} Could not be find due to Database server error`,
+      );
+
+    return researcher;
+  }
+
+  async findResearhcerByIds(ids: number[]) {
+    const [err, researcher] = await to(
+      this.researcherRepository.find({
+        where: {
+          id: In(ids),
+        },
+      }),
+    );
+
+    if (err)
+      throw new InternalServerErrorException(
+        `List of Researchers could not be find due to database server error`,
       );
 
     return researcher;

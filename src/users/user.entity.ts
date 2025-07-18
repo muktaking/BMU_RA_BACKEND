@@ -2,6 +2,8 @@ import {
   BaseEntity,
   Column,
   Entity,
+  ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
@@ -9,7 +11,7 @@ import {
 export enum RolePermitted {
   guest = 0,
   member = 1,
-  contributor = 2,
+  researcher = 2,
   moderator = 3,
   coordinator = 4,
   admin = 5,
@@ -70,13 +72,6 @@ export abstract class Profile extends BaseEntity {
   address: string;
 }
 
-// this to be implement as @OneToMany relationship
-interface SocialMediaAccounts {
-  fb_link: string;
-  tw_link: string;
-  li_link: string;
-}
-
 @Entity()
 export class User extends Profile {
   @Column({ type: 'varchar', nullable: false })
@@ -93,4 +88,25 @@ export class User extends Profile {
 
   @Column({ type: 'timestamp', nullable: true })
   resetTokenExpiration: Timestamp;
+
+  @OneToMany(() => SocialProfile, (socialProfile) => socialProfile.user, {
+    cascade: true,
+    eager: true,
+  })
+  socialProfiles: SocialProfile[];
+}
+
+@Entity()
+export class SocialProfile {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column()
+  platform: string; // e.g., "facebook", "twitter"
+
+  @Column()
+  url: string;
+
+  @ManyToOne(() => User, (user) => user.socialProfiles)
+  user: User;
 }

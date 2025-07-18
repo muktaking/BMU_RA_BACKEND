@@ -2,6 +2,7 @@ import { Type } from 'class-transformer';
 import {
   IsArray,
   IsDate,
+  IsNumber,
   IsOptional,
   IsString,
   MaxLength,
@@ -14,8 +15,9 @@ export class CreateScaleDto extends PublicationDto {
   short_title: string;
 
   @IsArray()
-  @IsString({ each: true })
-  validator: Array<string>;
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  validator_id: Array<number>;
 
   @IsOptional()
   @IsDate()

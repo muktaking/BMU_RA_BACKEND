@@ -7,12 +7,17 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { ScalesService } from './scales.service';
 import { CreateScaleDto } from './dto/create-scale.dto';
 import { UpdateScaleDto } from './dto/update-scale.dto';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/roles.guard';
+import { Role } from 'src/roles.decorator';
+import { RolePermitted } from 'src/users/user.entity';
 
 @Controller('scales')
 export class ScalesController {
@@ -29,6 +34,8 @@ export class ScalesController {
   // }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.member)
   @UsePipes(ValidationPipe)
   async createAnScale(@Body() createScaleDto: CreateScaleDto) {
     return await this.scalesService.createAnScale(createScaleDto);

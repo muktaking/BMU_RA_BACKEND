@@ -1,7 +1,10 @@
+import { Researcher } from 'src/researchers/researcher.entity';
 import {
   BaseEntity,
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
@@ -13,14 +16,15 @@ export abstract class Publication extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: false })
   title: string;
 
-  //   @Column({ type: 'varchar', length: 15, nullable: false })
-  //   short_title: string;
-
   @Column({ type: 'varchar', length: 255, nullable: false })
   description: string;
 
-  @Column({ nullable: false })
-  author: string;
+  @Column({ type: 'simple-array', nullable: false })
+  author_id: number[];
+
+  @ManyToMany(() => Researcher)
+  @JoinTable()
+  authors: Researcher[];
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   publication_link: string;
@@ -34,8 +38,8 @@ export abstract class Publication extends BaseEntity {
   @Column({ type: 'varchar', length: 15, nullable: true })
   publisher: string;
 
-  @Column({ nullable: true })
-  tags: string;
+  @Column({ type: 'simple-array', nullable: true })
+  tags: string[];
 }
 
 @Entity()

@@ -1,13 +1,17 @@
 import {
+  IsArray,
   IsEmail,
   IsEnum,
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUrl,
   Matches,
   MaxLength,
+  ValidateNested,
 } from 'class-validator';
 import { Gender, Institute, RolePermitted } from '../user.entity';
+import { Type } from 'class-transformer';
 
 export abstract class ProfileDto {
   @IsString()
@@ -48,6 +52,12 @@ export abstract class ProfileDto {
 
   @IsOptional()
   address: string;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SocialProfileDto)
+  socialProfile: SocialProfileDto[];
 }
 
 export class CreateUserDto extends ProfileDto {
@@ -60,4 +70,15 @@ export class CreateUserDto extends ProfileDto {
 
   @IsOptional()
   role: RolePermitted;
+}
+
+export class SocialProfileDto {
+  @IsString()
+  @IsNotEmpty()
+  platform: string;
+
+  @IsString()
+  @IsNotEmpty()
+  @IsUrl()
+  profileLink: string;
 }

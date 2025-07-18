@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   HttpException,
   HttpStatus,
   Injectable,
@@ -6,33 +7,49 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './article.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { to } from 'src/utils/utils';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { Researcher } from 'src/researchers/researcher.entity';
 
 @Injectable()
 export class ArticlesService {
   constructor(
     @InjectRepository(Article)
     private articleRepository: Repository<Article>,
+    @InjectRepository(Researcher)
+    private researcherRepository: Repository<Researcher>,
   ) {}
 
-  async createAnArticle(createArticleDto: CreateArticleDto) {
-    const article = new Article();
+  //Function to get researchers by array of ids
+  //why use here - to inject repository not service
+  async findResearhcerByIds(ids: number[]) {
+    const [err, researchers] = await to(
+      this.researcherRepository.find({
+        where: {
+          id: In(ids),
+        },
+      }),
+    );
 
-    // article.title = createArticleDto.title;
-    // article.short_title = createArticleDto.short_title;
-    // article.description = createArticleDto.description;
-    //article.author = createArticleDto.author?.join(',');
-    // article.publication_link = createArticleDto.publication_link;
-    //article.tags = createArticleDto.tags?.join(',');
+    if (err)
+      throw new InternalServerErrorException(
+        `List of Researchers could not be find due to database server error`,
+      );
+
+    return researchers;
+  }
+
+  async createAnArticle(createArticleDto: CreateArticleDto) {
+    const researchers: Researcher[] = await this.findResearhcerByIds(
+      createArticleDto.author_id,
+    );
 
     const [err, resOnSave] = await to(
       this.articleRepository.save({
         ...createArticleDto,
-        author: createArticleDto.author?.join(','),
-        tags: createArticleDto.tags?.join(','),
+        authors: researchers,
       }),
     );
 
@@ -58,24 +75,29 @@ export class ArticlesService {
   }
 
   async updateAnArticleById(id: number, updateArticleDto: UpdateArticleDto) {
-    const [errOnUpdate, resOnUpdate] = await to(
-      this.articleRepository.update(id, {
-        ...updateArticleDto,
-        author: updateArticleDto.author?.join(','),
-        tags: updateArticleDto.tags?.join(','),
-      }),
-    );
+    let errOnUpdate;
+    let resOnUpdate;
+
+    let article = await this.articleRepository.findOneBy({ id: id });
+    if (!article)
+      throw new BadRequestException('Article is not present on the database.');
+
+    Object.assign(article, updateArticleDto);
+
+    if (updateArticleDto?.author_id) {
+      const researchers: Researcher[] = await this.findResearhcerByIds(
+        updateArticleDto.author_id,
+      );
+
+      article.authors = researchers;
+    }
+
+    [errOnUpdate, resOnUpdate] = await to(this.articleRepository.save(article));
 
     if (errOnUpdate)
       throw new InternalServerErrorException(errOnUpdate.message);
 
-    if (resOnUpdate.affected > 0) {
-      return { message: 'Article data edited successfully' };
-    } else
-      throw new HttpException(
-        'No data is saved. Either no data is sent or no entry is present.',
-        HttpStatus.NO_CONTENT,
-      );
+    return { message: 'Article data edited successfully', data: resOnUpdate };
   }
 
   async deleteArticleById(id: number) {

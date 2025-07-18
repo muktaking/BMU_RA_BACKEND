@@ -17,7 +17,7 @@ import { typeOrmConfig } from './typeormconfig/typeorm.config';
     ScalesModule,
     ArticlesModule,
     AuthenticationModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot(typeOrmConfig),
   ],
   controllers: [AppController],

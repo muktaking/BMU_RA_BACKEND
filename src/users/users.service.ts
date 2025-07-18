@@ -5,9 +5,9 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from './user.entity';
+import { User, SocialProfile } from './user.entity';
 import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { genSalt, hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { to } from 'src/utils/utils';
@@ -18,6 +18,18 @@ export class UsersService {
     @InjectRepository(User)
     private userRepository: Repository<User>,
   ) {}
+
+  async findUserByEmail(email: string) {
+    const [err, user] = await to(this.userRepository.findBy({ email: email }));
+    if (err)
+      throw new InternalServerErrorException(
+        'User data could not be retrived due to server error.',
+      );
+
+    return user[0]; //user is an array
+  }
+
+  // Creating an user
 
   async createUser(createUser: CreateUserDto) {
     const user = new User();
@@ -32,10 +44,20 @@ export class UsersService {
     user.institute = createUser.institute;
     user.address = createUser.address;
     user.role = 1;
-    //hashing password
+    user.socialProfiles = [];
+
     try {
-      const salt = await bcrypt.genSalt(10);
-      user.password = await bcrypt.hash(createUser.password, salt);
+      //intregating socialProfile
+      createUser?.socialProfile.forEach((profile) => {
+        const sProfile = new SocialProfile();
+        sProfile.platform = profile.platform;
+        sProfile.url = profile.profileLink;
+        user.socialProfiles.push(sProfile);
+      });
+
+      //hashing password
+      const salt = await genSalt(10);
+      user.password = await hash(createUser.password, salt);
       const userEntryRes = await this.userRepository.save(user);
       return userEntryRes;
     } catch (error) {
@@ -54,20 +76,42 @@ export class UsersService {
   }
 
   async updateUser(id: number, updateUserDto: UpdateUserDto) {
-    const [errOnUpdate, resOnUpdate] = await to(
-      this.userRepository.update(id, updateUserDto),
-    );
+    const [err, [user]] = await to(this.userRepository.findBy({ id: id }));
+    if (err) throw new InternalServerErrorException(err.message);
+
+    if (updateUserDto.socialProfile) {
+      if (user.socialProfiles?.length < 1) user.socialProfiles = []; // if user does not socialProfiles previously
+
+      // iterate updated socialProfiles to update or add new ones
+      updateUserDto.socialProfile?.forEach((sProfile) => {
+        // find whether old one exists
+        const editedProfiles = user?.socialProfiles?.find(
+          (uProfile) => uProfile.platform === sProfile.platform,
+        );
+
+        if (editedProfiles) editedProfiles.url = sProfile.profileLink;
+
+        //save new one
+        if (!editedProfiles) {
+          const newProfile = new SocialProfile();
+          newProfile.platform = sProfile.platform;
+          newProfile.url = sProfile.profileLink;
+          user.socialProfiles.push(newProfile);
+        }
+      });
+
+      //delete socialProfile so that it does not wrongly assinged again
+      delete updateUserDto.socialProfile;
+    }
+
+    Object.assign(user, updateUserDto);
+
+    const [errOnUpdate, resOnUpdate] = await to(this.userRepository.save(user));
 
     if (errOnUpdate)
       throw new InternalServerErrorException(errOnUpdate.message);
 
-    if (resOnUpdate.affected > 0) {
-      return { message: 'User data edited successfully' };
-    } else
-      throw new HttpException(
-        'No data is saved. Either no data is sent or no entry is present.',
-        HttpStatus.NO_CONTENT,
-      );
+    return { message: 'User data edited successfully' };
   }
 
   async deleteUser(id: number) {
