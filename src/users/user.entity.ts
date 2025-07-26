@@ -96,8 +96,7 @@ export class User extends Profile {
   socialProfiles: SocialProfile[];
 }
 
-@Entity()
-export class SocialProfile {
+export abstract class SocialProfileBase {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -106,7 +105,10 @@ export class SocialProfile {
 
   @Column()
   url: string;
+}
 
+@Entity()
+export class SocialProfile extends SocialProfileBase {
   @ManyToOne(() => User, (user) => user.socialProfiles)
   user: User;
 }

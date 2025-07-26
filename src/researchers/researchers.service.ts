@@ -5,7 +5,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
-import { Researcher } from './researcher.entity';
+import { Researcher, SocialProfileResearcher } from './researcher.entity';
 import { to } from 'src/utils/utils';
 import { CreateResearcherDto } from './dto/create-researcher.dto';
 import { UpdateResearcherDto } from './dto/update-researcher.dto';
@@ -76,6 +76,15 @@ export class ResearchersService {
     researcher.int_affiliation = createResearcherDto.int_affiliation?.join(',');
     researcher.editor_in_Journal =
       createResearcherDto.editor_in_Journal?.join(',');
+    researcher.socialProfiles = [];
+
+    //intregating socialProfile
+    createResearcherDto?.socialProfileResearcher.forEach((profile) => {
+      const sProfile = new SocialProfileResearcher();
+      sProfile.platform = profile.platform;
+      sProfile.url = profile.profileLink;
+      researcher.socialProfiles.push(sProfile);
+    });
 
     const [err, resOnSave] = await to(
       this.researcherRepository.save(researcher),
@@ -95,26 +104,52 @@ export class ResearchersService {
     id: number,
     updateResearcherDto: UpdateResearcherDto,
   ) {
+    const [err, [researcher]] = await to(
+      this.researcherRepository.findBy({ id: id }),
+    );
+    if (err) throw new InternalServerErrorException(err.message);
+
+    if (updateResearcherDto.socialProfileResearcher) {
+      if (researcher.socialProfiles?.length < 1) researcher.socialProfiles = []; // if user does not socialProfiles previously
+
+      // iterate updated socialProfiles to update or add new ones
+      updateResearcherDto.socialProfileResearcher?.forEach((sProfile) => {
+        // find whether old one exists
+        const editedProfiles = researcher?.socialProfiles?.find(
+          (uProfile) => uProfile.platform === sProfile.platform,
+        );
+
+        if (editedProfiles) editedProfiles.url = sProfile.profileLink;
+
+        //save new one
+        if (!editedProfiles) {
+          const newProfile = new SocialProfileResearcher();
+          newProfile.platform = sProfile.platform;
+          newProfile.url = sProfile.profileLink;
+          researcher.socialProfiles.push(newProfile);
+        }
+      });
+
+      //delete socialProfile so that it does not wrongly assinged again
+      delete updateResearcherDto.socialProfileResearcher;
+    }
+
+    Object.assign(researcher, {
+      ...updateResearcherDto,
+      publication: updateResearcherDto.publication?.join(','),
+      awards: updateResearcherDto.awards?.join(','),
+      int_affiliation: updateResearcherDto.int_affiliation?.join(','),
+      editor_in_Journal: updateResearcherDto.editor_in_Journal?.join(','),
+    });
+
     const [errOnUpdate, resOnUpdate] = await to(
-      this.researcherRepository.update(id, {
-        ...updateResearcherDto,
-        publication: updateResearcherDto.publication?.join(','),
-        awards: updateResearcherDto.awards?.join(','),
-        int_affiliation: updateResearcherDto.int_affiliation?.join(','),
-        editor_in_Journal: updateResearcherDto.editor_in_Journal?.join(','),
-      }),
+      this.researcherRepository.save(researcher),
     );
 
     if (errOnUpdate)
       throw new InternalServerErrorException(errOnUpdate.message);
 
-    if (resOnUpdate.affected > 0) {
-      return { message: 'Researcher data edited successfully' };
-    } else
-      throw new HttpException(
-        'No data is saved. Either no data is sent or no entry is present.',
-        HttpStatus.NO_CONTENT,
-      );
+    return { message: 'Researcher data edited successfully' };
   }
 
   async deleteResearcherById(id: number) {
