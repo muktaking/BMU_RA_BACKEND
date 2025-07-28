@@ -52,12 +52,6 @@ export abstract class ProfileDto {
 
   @IsOptional()
   address: string;
-
-  @IsOptional()
-  @IsArray()
-  @ValidateNested({ each: true })
-  @Type(() => SocialProfileDto)
-  socialProfile: SocialProfileDto[];
 }
 
 export class CreateUserDto extends ProfileDto {
@@ -70,6 +64,12 @@ export class CreateUserDto extends ProfileDto {
 
   @IsOptional()
   role: RolePermitted;
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => SocialProfileDto)
+  socialProfile: SocialProfileDto[];
 }
 
 export class SocialProfileDto {

@@ -10,6 +10,8 @@ import { to } from 'src/utils/utils';
 import { CreateResearcherDto } from './dto/create-researcher.dto';
 import { UpdateResearcherDto } from './dto/update-researcher.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import * as csv from 'csv-parser';
+import * as fs from 'fs';
 
 @Injectable()
 export class ResearchersService {
@@ -98,6 +100,34 @@ export class ResearchersService {
       });
 
     return resOnSave;
+  }
+
+  async createResearchersByUploadByCSV(res, file) {
+    const results: Array<Researcher> = [];
+
+    fs.createReadStream(file.path)
+      .pipe(csv())
+      .on('data', (data: Researcher) => results.push(data))
+      .on('end', () => {
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        Promise.all(
+          results.map(async (researcher: Researcher) => {
+            console.log(researcher);
+            //await this.createResearcher(researcher);
+          }),
+        )
+          .then((response) => {
+            res.json({ message: 'Successfully Uploaded Users' });
+          })
+          .catch((error) => {
+            //console.log(error);
+            res.status(HttpStatus.CONFLICT).json({ message: error.message });
+          });
+      });
   }
 
   async updateResearcherById(
