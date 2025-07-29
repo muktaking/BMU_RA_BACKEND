@@ -16,7 +16,7 @@ import { Type } from 'class-transformer';
 export abstract class ProfileDto {
   @IsString()
   @IsNotEmpty()
-  @MaxLength(15)
+  @MaxLength(50)
   firstname: string;
 
   @IsOptional()

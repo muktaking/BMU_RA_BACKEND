@@ -41,7 +41,7 @@ export abstract class Profile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 15, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   firstname: string;
 
   @Column({ type: 'varchar', length: 15, nullable: false })

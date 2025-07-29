@@ -7,11 +7,15 @@ import {
 import { In, Repository } from 'typeorm';
 import { Researcher, SocialProfileResearcher } from './researcher.entity';
 import { to } from 'src/utils/utils';
-import { CreateResearcherDto } from './dto/create-researcher.dto';
+import {
+  CreateResearcherDto,
+  SocialProfileResearcherDto,
+} from './dto/create-researcher.dto';
 import { UpdateResearcherDto } from './dto/update-researcher.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as csv from 'csv-parser';
 import * as fs from 'fs';
+import { SocialProfileDto } from 'src/users/dto/create-user.dto';
 
 @Injectable()
 export class ResearchersService {
@@ -73,11 +77,23 @@ export class ResearchersService {
     researcher.degree = createResearcherDto.degree;
     researcher.institute = createResearcherDto.institute;
     researcher.address = createResearcherDto.address;
-    researcher.publication = createResearcherDto.publication?.join(',');
-    researcher.awards = createResearcherDto.awards?.join(',');
-    researcher.int_affiliation = createResearcherDto.int_affiliation?.join(',');
-    researcher.editor_in_Journal =
-      createResearcherDto.editor_in_Journal?.join(',');
+    // if arrary of strings then join by comma, otherwise keep it as same
+    researcher.publication = Array.isArray(createResearcherDto.publication)
+      ? createResearcherDto.publication?.join(',')
+      : createResearcherDto.publication;
+    researcher.awards = Array.isArray(createResearcherDto.awards)
+      ? createResearcherDto.awards?.join(',')
+      : createResearcherDto.awards;
+    researcher.int_affiliation = Array.isArray(
+      createResearcherDto.int_affiliation,
+    )
+      ? createResearcherDto.int_affiliation?.join(',')
+      : createResearcherDto.int_affiliation;
+    researcher.editor_in_Journal = Array.isArray(
+      createResearcherDto.editor_in_Journal,
+    )
+      ? createResearcherDto.editor_in_Journal?.join(',')
+      : createResearcherDto.editor_in_Journal;
     researcher.socialProfiles = [];
 
     //intregating socialProfile
@@ -95,19 +111,19 @@ export class ResearchersService {
     if (err)
       throw new InternalServerErrorException({
         message:
-          'Researcher Profile could not be created due to database error.',
-        error: err,
+          'Researcher Profile could not be created due to database error. ' +
+          err.message,
       });
 
     return resOnSave;
   }
 
   async createResearchersByUploadByCSV(res, file) {
-    const results: Array<Researcher> = [];
+    const results: Array<CreateResearcherDto> = [];
 
     fs.createReadStream(file.path)
       .pipe(csv())
-      .on('data', (data: Researcher) => results.push(data))
+      .on('data', (data: CreateResearcherDto) => results.push(data))
       .on('end', () => {
         fs.unlink(file.path, (err) => {
           if (err) {
@@ -115,9 +131,37 @@ export class ResearchersService {
           }
         });
         Promise.all(
-          results.map(async (researcher: Researcher) => {
-            console.log(researcher);
-            //await this.createResearcher(researcher);
+          results.map(async (researcherPartialData) => {
+            const researcher = new CreateResearcherDto();
+            researcher.firstname = researcherPartialData.firstname;
+            researcher.lastname = researcherPartialData.lastname;
+            researcher.username = researcherPartialData.lastname?.toLowerCase();
+            researcher.avatar = 'neutral';
+            researcher.email = researcherPartialData.email;
+            researcher.gender = researcherPartialData.gender;
+            researcher.phone = researcherPartialData.phone;
+            researcher.degree = researcherPartialData.degree;
+            researcher.institute = researcherPartialData.institute;
+            researcher.address = researcherPartialData.address;
+            researcher.awards = researcherPartialData.awards;
+            researcher.int_affiliation = researcherPartialData.int_affiliation;
+            researcher.editor_in_Journal =
+              researcherPartialData.editor_in_Journal;
+            researcher.socialProfileResearcher = [];
+
+            //below chain function will return array of arrays containing socialProfile key and value (e.g [[sp_facebook,'hhtp://facebook.com']])
+            const socialProfiles = Object.entries(researcher).filter(([key]) =>
+              key.startsWith('sp_'),
+            );
+
+            socialProfiles.forEach((socialProfile) => {
+              const newProfile = new SocialProfileResearcherDto();
+              newProfile.platform = socialProfile[0].split('_')[1];
+              newProfile.profileLink = socialProfile[1];
+              researcher.socialProfileResearcher.push(newProfile);
+            });
+
+            await this.createResearcher(researcher);
           }),
         )
           .then((response) => {
