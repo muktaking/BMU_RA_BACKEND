@@ -22,6 +22,9 @@ export abstract class Publication extends BaseEntity {
   @Column({ type: 'simple-array', nullable: false })
   author_id: number[];
 
+  @Column({ type: 'simple-array', nullable: false })
+  author_name: string[];
+
   @ManyToMany(() => Researcher)
   @JoinTable()
   authors: Researcher[];
@@ -35,7 +38,7 @@ export abstract class Publication extends BaseEntity {
   @Column({ type: 'timestamp', nullable: true })
   published_year: Timestamp;
 
-  @Column({ type: 'varchar', length: 15, nullable: true })
+  @Column({ type: 'varchar', length: 255, nullable: true })
   publisher: string;
 
   @Column({ type: 'simple-array', nullable: true })

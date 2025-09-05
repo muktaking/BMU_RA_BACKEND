@@ -1,5 +1,6 @@
 import { Transform, Type } from 'class-transformer';
 import {
+  IsAlphanumeric,
   IsArray,
   IsDate,
   IsNumber,
@@ -25,6 +26,10 @@ export abstract class PublicationDto {
   @IsNumber({}, { each: true })
   @Type(() => Number)
   author_id: Array<number>;
+
+  @IsArray()
+  @Type(() => String)
+  author_name: Array<string>;
 
   @IsOptional()
   @IsString()

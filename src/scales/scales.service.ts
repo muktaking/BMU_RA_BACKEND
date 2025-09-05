@@ -41,6 +41,7 @@ export class ScalesService {
   }
 
   async createAnScale(createScaleDto: CreateScaleDto) {
+    const scale = new Scale();
     const authors: Researcher[] = await this.findResearhcerByIds(
       createScaleDto.author_id,
     );
@@ -49,13 +50,11 @@ export class ScalesService {
       createScaleDto.validator_id,
     );
 
-    const [err, resOnSave] = await to(
-      this.scaleRepository.save({
-        ...createScaleDto,
-        authors,
-        validators,
-      }),
-    );
+    Object.assign(scale, createScaleDto);
+    scale.authors = authors;
+    scale.validators = validators;
+
+    const [err, resOnSave] = await to(this.scaleRepository.save(scale));
 
     if (err)
       throw new InternalServerErrorException({

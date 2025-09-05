@@ -12,6 +12,8 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { to } from 'src/utils/utils';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Researcher } from 'src/researchers/researcher.entity';
+import * as csv from 'csv-parser';
+import * as fs from 'fs';
 
 @Injectable()
 export class ArticlesService {
@@ -42,16 +44,16 @@ export class ArticlesService {
   }
 
   async createAnArticle(createArticleDto: CreateArticleDto) {
+    const article = new Article();
+
     const researchers: Researcher[] = await this.findResearhcerByIds(
       createArticleDto.author_id,
     );
 
-    const [err, resOnSave] = await to(
-      this.articleRepository.save({
-        ...createArticleDto,
-        authors: researchers,
-      }),
-    );
+    Object.assign(article, createArticleDto);
+    article.authors = researchers;
+
+    const [err, resOnSave] = await to(this.articleRepository.save(article));
 
     if (err)
       throw new InternalServerErrorException({
@@ -60,6 +62,46 @@ export class ArticlesService {
       });
 
     return { message: 'Article is created successfully', data: resOnSave };
+  }
+
+  async createArticlesByUploadByCSV(res, file) {
+    const results: Array<CreateArticleDto> = [];
+
+    fs.createReadStream(file.path)
+      .pipe(csv())
+      .on('data', (data: CreateArticleDto) => results.push(data))
+      .on('end', () => {
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        Promise.all(
+          results.map(async (articlePartialData) => {
+            const article = new CreateArticleDto();
+            article.title = articlePartialData.title;
+            article.description = articlePartialData.title;
+            article.author_name = articlePartialData.author_name;
+            article.author_id = articlePartialData.author_id;
+            article.publisher = articlePartialData.publisher
+              ? articlePartialData.publisher
+              : '';
+            article.doi = articlePartialData.doi ? articlePartialData.doi : '';
+            article.publication_link = articlePartialData?.publication_link;
+            article.server_link = articlePartialData?.server_link;
+            article.tags = articlePartialData?.tags;
+
+            await this.createAnArticle(article);
+          }),
+        )
+          .then((response) => {
+            res.json({ message: 'Successfully Uploaded Articles' });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(HttpStatus.CONFLICT).json({ message: error.message });
+          });
+      });
   }
 
   async findAllArticles() {
