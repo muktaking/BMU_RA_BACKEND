@@ -4,11 +4,14 @@ import { Column, Entity, JoinTable, ManyToMany, Timestamp } from 'typeorm';
 
 @Entity()
 export class Scale extends Publication {
-  @Column({ type: 'varchar', length: 15, nullable: false })
+  @Column({ type: 'varchar', length: 25, nullable: false })
   short_title: string;
 
   @Column({ type: 'simple-array', nullable: false })
   validator_id: number[];
+
+  @Column({ type: 'simple-array', nullable: false })
+  validator_name: string[];
 
   @ManyToMany(() => Researcher)
   @JoinTable()

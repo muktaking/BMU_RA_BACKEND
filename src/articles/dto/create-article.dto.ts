@@ -33,7 +33,7 @@ export abstract class PublicationDto {
 
   @IsOptional()
   @IsString()
-  @MaxLength(255)
+  @MaxLength(1024)
   publication_link: string | undefined;
 
   @IsOptional()

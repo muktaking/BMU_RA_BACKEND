@@ -5,6 +5,8 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
+import * as csv from 'csv-parser';
+import * as fs from 'fs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Scale } from './scale.entity';
 import { In, Repository } from 'typeorm';
@@ -54,6 +56,11 @@ export class ScalesService {
     scale.authors = authors;
     scale.validators = validators;
 
+    if (scale.author_id.length < 1) {
+      scale.author_id = createScaleDto.validator_id;
+      scale.author_name = createScaleDto.validator_name;
+    }
+
     const [err, resOnSave] = await to(this.scaleRepository.save(scale));
 
     if (err)
@@ -63,6 +70,49 @@ export class ScalesService {
       });
 
     return { message: 'Scale is created successfully', data: resOnSave };
+  }
+
+  async createScalesByUploadByCSV(res, file) {
+    const results: Array<CreateScaleDto> = [];
+
+    fs.createReadStream(file.path)
+      .pipe(csv())
+      .on('data', (data: CreateScaleDto) => results.push(data))
+      .on('end', () => {
+        fs.unlink(file.path, (err) => {
+          if (err) {
+            console.log(err);
+          }
+        });
+        Promise.all(
+          results.map(async (scalePartialData) => {
+            const scale = new CreateScaleDto();
+            scale.title = scalePartialData.title;
+            scale.short_title = scalePartialData.short_title;
+            scale.validator_id = scalePartialData.validator_id;
+            scale.validator_name = scalePartialData.validator_name;
+            scale.validation_year = scalePartialData.validation_year;
+            scale.description = scalePartialData.title;
+            scale.author_name = scalePartialData.author_name;
+            scale.author_id = scalePartialData.author_id;
+            scale.publisher = scalePartialData.publisher
+              ? scalePartialData.publisher
+              : '';
+            scale.publication_link = scalePartialData?.publication_link;
+            scale.server_link = scalePartialData?.server_link;
+            scale.tags = scalePartialData?.tags;
+
+            await this.createAnScale(scale);
+          }),
+        )
+          .then((response) => {
+            res.json({ message: 'Successfully Uploaded Scales' });
+          })
+          .catch((error) => {
+            console.log(error);
+            res.status(HttpStatus.CONFLICT).json({ message: error.message });
+          });
+      });
   }
 
   async findAllScales() {

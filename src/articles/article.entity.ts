@@ -29,7 +29,7 @@ export abstract class Publication extends BaseEntity {
   @JoinTable()
   authors: Researcher[];
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
+  @Column({ type: 'varchar', length: 1024, nullable: true })
   publication_link: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
