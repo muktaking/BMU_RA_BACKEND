@@ -24,8 +24,21 @@ export class ResearchersService {
     private researcherRepository: Repository<Researcher>,
   ) {}
 
-  async findAllResearchers() {
-    const [err, researchers] = await to(this.researcherRepository.find());
+  // async findAllResearchers() {
+  //   const [err, researchers] = await to(this.researcherRepository.find());
+
+  //   if (err)
+  //     throw new InternalServerErrorException(
+  //       'Researchers Could not be find due to Database server error',
+  //     );
+
+  //   return researchers;
+  // }
+
+  async findAllResearchersWithLimit(limit: number) {
+    const [err, researchers] = await to(
+      this.researcherRepository.find({ take: limit }),
+    );
 
     if (err)
       throw new InternalServerErrorException(
@@ -37,7 +50,7 @@ export class ResearchersService {
 
   async findResearhcerById(id: number) {
     const [err, researcher] = await to(
-      this.researcherRepository.findBy({ id: id }),
+      this.researcherRepository.findOneBy({ id: id }),
     );
 
     if (err)
@@ -46,6 +59,20 @@ export class ResearchersService {
       );
 
     return researcher;
+  }
+
+  async findResearhcerByInstituteId(institute_id: number) {
+    console.log(institute_id);
+    const [err, researchers] = await to(
+      this.researcherRepository.findBy({ institute: institute_id }),
+    );
+
+    if (err)
+      throw new InternalServerErrorException(
+        `Researcheres Could not be find due to Database server error`,
+      );
+
+    return researchers;
   }
 
   async findResearhcerByIds(ids: number[]) {

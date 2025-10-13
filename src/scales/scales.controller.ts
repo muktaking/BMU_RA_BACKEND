@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseGuards,
@@ -29,9 +30,14 @@ import { csvFileFilter, editFileName } from 'src/utils/files-uploading.utils';
 export class ScalesController {
   constructor(private scalesService: ScalesService) {}
 
+  @Get(':id')
+  async getArticleByid(@Param('id', ParseIntPipe) id: number) {
+    return await this.scalesService.findArticleById(id);
+  }
+
   @Get()
-  async getAllScales() {
-    return await this.scalesService.findAllScales();
+  async getAllScales(@Query('limit', ParseIntPipe) limit: number) {
+    return await this.scalesService.findAllScales(limit);
   }
 
   // @Get('author/:id')

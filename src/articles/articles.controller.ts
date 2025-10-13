@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -25,8 +26,13 @@ export class ArticlesController {
   constructor(private articleService: ArticlesService) {}
 
   @Get()
-  async getAllArticles() {
-    return await this.articleService.findAllArticles();
+  async getAllArticles(@Query('limit', ParseIntPipe) limit: number) {
+    return await this.articleService.findAllArticles(limit);
+  }
+
+  @Get(':id')
+  async getArticleByid(@Param('id', ParseIntPipe) id: number) {
+    return await this.articleService.findArticleById(id);
   }
 
   // @Get('author/:id')

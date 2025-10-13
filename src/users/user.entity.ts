@@ -65,6 +65,9 @@ export abstract class Profile extends BaseEntity {
   @Column({ type: 'varchar', nullable: true })
   degree: string;
 
+  @Column({ type: 'varchar', nullable: true })
+  designation: string;
+
   @Column({ type: 'enum', enum: Institute })
   institute: Institute;
 

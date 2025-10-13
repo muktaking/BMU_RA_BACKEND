@@ -7,6 +7,7 @@ import {
   ParseIntPipe,
   Patch,
   Post,
+  Query,
   Res,
   UploadedFile,
   UseInterceptors,
@@ -25,13 +26,22 @@ export class ResearchersController {
   constructor(private researchersService: ResearchersService) {}
 
   @Get()
-  async getAllResearchers() {
-    return await this.researchersService.findAllResearchers();
+  async getAllResearchers(@Query('limit', ParseIntPipe) limit: number) {
+    return await this.researchersService.findAllResearchersWithLimit(limit);
   }
 
   @Get(':id')
   async getResearhcerById(@Param('id', ParseIntPipe) id: number) {
     return await this.researchersService.findResearhcerById(id);
+  }
+
+  @Get('/institute/:institute_id')
+  async getResearhcersByInstituteId(
+    @Param('institute_id', ParseIntPipe) institute_Id: number,
+  ) {
+    return await this.researchersService.findResearhcerByInstituteId(
+      institute_Id,
+    );
   }
 
   @Post('/upload/csv')

@@ -104,8 +104,10 @@ export class ArticlesService {
       });
   }
 
-  async findAllArticles() {
-    const [err, articles] = await to(this.articleRepository.find());
+  async findAllArticles(limit: number) {
+    const [err, articles] = await to(
+      this.articleRepository.find({ take: limit, order: { id: 'DESC' } }),
+    );
 
     if (err)
       throw new InternalServerErrorException({
@@ -114,6 +116,23 @@ export class ArticlesService {
       });
 
     return articles;
+  }
+
+  async findArticleById(id: number) {
+    const [err, article] = await to(
+      this.articleRepository.findOneBy({ id: id }),
+    );
+
+    if (err)
+      throw new InternalServerErrorException({
+        message: 'Articles Data could not be retrived due to server error.',
+        data: err,
+      });
+
+    if (!article)
+      throw new BadRequestException('Article is not present on the database.');
+
+    return article;
   }
 
   async updateAnArticleById(id: number, updateArticleDto: UpdateArticleDto) {

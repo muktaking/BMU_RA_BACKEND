@@ -115,8 +115,10 @@ export class ScalesService {
       });
   }
 
-  async findAllScales() {
-    const [err, articles] = await to(this.scaleRepository.find());
+  async findAllScales(limit: number) {
+    const [err, articles] = await to(
+      this.scaleRepository.find({ take: limit, order: { id: 'DESC' } }),
+    );
 
     if (err)
       throw new InternalServerErrorException({
@@ -125,6 +127,21 @@ export class ScalesService {
       });
 
     return articles;
+  }
+
+  async findArticleById(id: number) {
+    const [err, scale] = await to(this.scaleRepository.findOneBy({ id: id }));
+
+    if (err)
+      throw new InternalServerErrorException({
+        message: 'Articles Data could not be retrived due to server error.',
+        data: err,
+      });
+
+    if (!scale)
+      throw new BadRequestException('Scale is not present on the database.');
+
+    return scale;
   }
 
   /**
