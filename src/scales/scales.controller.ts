@@ -66,7 +66,7 @@ export class ScalesController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.member)
+  @Role(RolePermitted.researcher)
   @UsePipes(ValidationPipe)
   async createAnScale(@Body() createScaleDto: CreateScaleDto) {
     return await this.scalesService.createAnScale(createScaleDto);
@@ -74,7 +74,7 @@ export class ScalesController {
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Role(RolePermitted.researcher)
   @UsePipes(ValidationPipe)
   async updateAnScaleById(
     @Param('id', ParseIntPipe) id: number,
@@ -85,7 +85,7 @@ export class ScalesController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Role(RolePermitted.researcher)
   async deleteAScaleById(@Param('id', ParseIntPipe) id: number) {
     return await this.scalesService.deleteAScaleById(id);
   }

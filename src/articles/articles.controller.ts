@@ -66,7 +66,7 @@ export class ArticlesController {
 
   @Post()
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Role(RolePermitted.researcher)
   @UsePipes(ValidationPipe)
   async createAnArticle(@Body() createArticleDto: CreateArticleDto) {
     return await this.articleService.createAnArticle(createArticleDto);
@@ -74,7 +74,7 @@ export class ArticlesController {
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Role(RolePermitted.researcher)
   @UsePipes(ValidationPipe)
   async updateAnArticleById(
     @Param('id', ParseIntPipe) id: number,
@@ -85,7 +85,7 @@ export class ArticlesController {
 
   @Delete(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Role(RolePermitted.researcher)
   async deleteAnArticleById(@Param('id', ParseIntPipe) id: number) {
     return await this.articleService.deleteArticleById(id);
   }
