@@ -29,6 +29,7 @@ export abstract class ProfileDto {
   @MaxLength(15)
   username: string;
 
+  @IsOptional()
   @IsString()
   @MaxLength(255)
   avatar: string;
@@ -47,6 +48,7 @@ export abstract class ProfileDto {
   degree: string;
 
   @IsOptional()
+  @Type(() => Number)
   @IsEnum([1, 2, 3, 4, 5, 6, 7])
   institute: Institute;
 
@@ -58,7 +60,8 @@ export class CreateUserDto extends ProfileDto {
   @IsString()
   @IsNotEmpty()
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})/, {
-    message: 'Your Password is too weak',
+    message:
+      'Password must contain at least one uppercase letter, one lowercase letter, one number and must be at least 6 characters long',
   })
   password: string;
 

@@ -124,7 +124,7 @@ export class ResearchersService {
     researcher.socialProfiles = [];
 
     //intregating socialProfile
-    createResearcherDto?.socialProfileResearcher.forEach((profile) => {
+    createResearcherDto.socialProfileResearcher?.forEach((profile) => {
       const sProfile = new SocialProfileResearcher();
       sProfile.platform = profile.platform;
       sProfile.url = profile.profileLink;

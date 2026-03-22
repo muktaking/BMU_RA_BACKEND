@@ -10,6 +10,7 @@ import {
   Query,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -20,6 +21,10 @@ import { UpdateArticleDto } from './dto/update-article.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import { csvFileFilter, editFileName } from 'src/utils/files-uploading.utils';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/roles.guard';
+import { Role } from 'src/roles.decorator';
+import { RolePermitted } from 'src/users/user.entity';
 
 @Controller('articles')
 export class ArticlesController {
@@ -41,6 +46,8 @@ export class ArticlesController {
   // }
 
   @Post('/upload/csv')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -58,12 +65,16 @@ export class ArticlesController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
   async createAnArticle(@Body() createArticleDto: CreateArticleDto) {
     return await this.articleService.createAnArticle(createArticleDto);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
   async updateAnArticleById(
     @Param('id', ParseIntPipe) id: number,
@@ -73,6 +84,8 @@ export class ArticlesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   async deleteAnArticleById(@Param('id', ParseIntPipe) id: number) {
     return await this.articleService.deleteArticleById(id);
   }

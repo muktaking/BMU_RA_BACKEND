@@ -1,6 +1,6 @@
 import { Publication } from 'src/articles/article.entity';
 import { Researcher } from 'src/researchers/researcher.entity';
-import { Column, Entity, JoinTable, ManyToMany, Timestamp } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()
 export class Scale extends Publication {
@@ -17,6 +17,13 @@ export class Scale extends Publication {
   @JoinTable()
   validators: Researcher[];
 
-  @Column({ type: 'timestamp', nullable: true })
-  validation_year: Timestamp;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    transformer: {
+      to: (value: string | Date) => value,
+      from: (value: Date) => (value ? value.toDateString() : value),
+    },
+  })
+  validation_year: string;
 }

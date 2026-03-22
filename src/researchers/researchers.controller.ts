@@ -10,6 +10,7 @@ import {
   Query,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
   UsePipes,
   ValidationPipe,
@@ -20,6 +21,10 @@ import { UpdateResearcherDto } from './dto/update-researcher.dto';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage, Multer } from 'multer';
 import { csvFileFilter, editFileName } from 'src/utils/files-uploading.utils';
+import { AuthGuard } from '@nestjs/passport';
+import { RolesGuard } from 'src/roles.guard';
+import { Role } from 'src/roles.decorator';
+import { RolePermitted } from 'src/users/user.entity';
 
 @Controller('researchers')
 export class ResearchersController {
@@ -45,6 +50,8 @@ export class ResearchersController {
   }
 
   @Post('/upload/csv')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -65,12 +72,16 @@ export class ResearchersController {
   }
 
   @Post()
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
   async createResearcher(@Body() createResearcherDto: CreateResearcherDto) {
     return await this.researchersService.createResearcher(createResearcherDto);
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
   async updateResearcherById(
     @Param('id', ParseIntPipe) id: number,
@@ -83,6 +94,8 @@ export class ResearchersController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.coordinator)
   async deleteResearcherById(@Param('id', ParseIntPipe) id: number) {
     return await this.researchersService.deleteResearcherById(id);
   }

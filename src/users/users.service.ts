@@ -48,7 +48,7 @@ export class UsersService {
 
     try {
       //intregating socialProfile
-      createUser?.socialProfile.forEach((profile) => {
+      createUser.socialProfile?.forEach((profile) => {
         const sProfile = new SocialProfile();
         sProfile.platform = profile.platform;
         sProfile.url = profile.profileLink;
@@ -61,6 +61,7 @@ export class UsersService {
       const userEntryRes = await this.userRepository.save(user);
       return userEntryRes;
     } catch (error) {
+      console.log(error);
       if (error.code === 'ER_DUP_ENTRY') {
         throw new HttpException(
           `'${user.email}' is already exist.`,

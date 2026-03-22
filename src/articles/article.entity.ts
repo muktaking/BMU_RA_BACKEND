@@ -1,12 +1,12 @@
 import { Researcher } from 'src/researchers/researcher.entity';
 import {
   BaseEntity,
+  BeforeInsert,
   Column,
   Entity,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn,
-  Timestamp,
 } from 'typeorm';
 
 export abstract class Publication extends BaseEntity {
@@ -35,8 +35,15 @@ export abstract class Publication extends BaseEntity {
   @Column({ type: 'varchar', length: 255, nullable: true })
   server_link: string;
 
-  @Column({ type: 'timestamp', nullable: true })
-  published_year: Timestamp;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    transformer: {
+      to: (value: string | Date) => value,
+      from: (value: Date) => (value ? value.toDateString() : value),
+    },
+  })
+  published_year: string;
 
   @Column({ type: 'varchar', length: 255, nullable: true })
   publisher: string;
@@ -47,6 +54,13 @@ export abstract class Publication extends BaseEntity {
 
 @Entity()
 export class Article extends Publication {
-  @Column({ type: 'varchar', length: 100, nullable: true, unique: true })
+  @Column({ type: 'varchar', length: 100, nullable: false, unique: true })
   doi: string;
+
+  @BeforeInsert()
+  generateDOI() {
+    if (!this.doi || this.doi.trim() === '') {
+      this.doi = `10.${Date.now()}/${Math.random().toString(36).substring(2, 9)}`;
+    }
+  }
 }

@@ -12,23 +12,19 @@ import { ProfileDto } from 'src/users/dto/create-user.dto';
 
 export class CreateResearcherDto extends ProfileDto {
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
+  @IsString()
   publication: Array<string>;
 
   @IsOptional()
-  @IsString({ each: true })
-  @IsArray()
+  @IsString()
   awards: Array<string>;
 
   @IsOptional()
-  @IsString({ each: true })
-  @IsArray()
+  @IsString()
   int_affiliation: Array<string>;
 
   @IsOptional()
-  @IsArray()
-  @IsString({ each: true })
+  @IsString()
   editor_in_Journal: Array<string>;
 
   @IsOptional()

@@ -3,15 +3,20 @@ import {
   Controller,
   Post,
   Req,
+  Res,
   UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Response, Request } from 'express';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthenticationService } from './authentication.service';
 import { AuthDto } from './dto/auth.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { Role } from 'src/roles.decorator';
+import { RolePermitted } from 'src/users/user.entity';
+import { RolesGuard } from 'src/roles.guard';
 
 @Controller('authentication')
 export class AuthenticationController {
@@ -22,8 +27,29 @@ export class AuthenticationController {
 
   @Post('/login')
   @UseGuards(AuthGuard('local'))
-  async login(@Req() req) {
-    return await this.authentcationService.authenticateUser(req.user);
+  async login(@Req() req, @Res({ passthrough: true }) res: Response) {
+    const authResult = await this.authentcationService.authenticateUser(
+      req.user,
+    );
+    res.cookie('access_token', authResult.accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 1000 * 60 * 60 * 24, // 1 day
+    });
+
+    return {
+      message: 'Success',
+      user: { id: authResult.id, role: req.user.role },
+    };
+  }
+
+  @Post('logout')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.member)
+  async logout(@Res({ passthrough: true }) res: Response) {
+    res.clearCookie('access_token');
+    return { message: 'Logged out successfully' };
   }
 
   @Post('/registration')

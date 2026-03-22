@@ -46,6 +46,8 @@ export class ScalesController {
   // }
 
   @Post('/upload/csv')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -71,6 +73,8 @@ export class ScalesController {
   }
 
   @Patch(':id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
   async updateAnScaleById(
     @Param('id', ParseIntPipe) id: number,
@@ -80,6 +84,8 @@ export class ScalesController {
   }
 
   @Delete(':id')
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Role(RolePermitted.moderator)
   async deleteAScaleById(@Param('id', ParseIntPipe) id: number) {
     return await this.scalesService.deleteAScaleById(id);
   }

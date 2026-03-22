@@ -55,11 +55,13 @@ export class ArticlesService {
 
     const [err, resOnSave] = await to(this.articleRepository.save(article));
 
-    if (err)
+    if (err) {
+      console.log(err);
       throw new InternalServerErrorException({
         message: 'Article Data could not be created due to server error.',
         data: err,
       });
+    }
 
     return { message: 'Article is created successfully', data: resOnSave };
   }
