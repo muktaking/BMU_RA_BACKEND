@@ -137,6 +137,24 @@ export class ArticlesService {
     return article;
   }
 
+  async findAllArticlesByResearcherId(id: number) {
+    const idString = id.toString();
+
+    return await this.articleRepository
+      .createQueryBuilder('article')
+      // 1. Matches if it's the exact and only ID (e.g., "5")
+      .where('article.author_id = :exact', { exact: idString })
+      // 2. Matches if it's the first ID in a list (e.g., "5,2,3")
+      .orWhere('article.author_id LIKE :start', { start: `${idString},%` })
+      // 3. Matches if it's a middle ID in a list (e.g., "2,5,3")
+      .orWhere('article.author_id LIKE :middle', { middle: `%,${idString},%` })
+      // 4. Matches if it's the last ID in a list (e.g., "2,3,5")
+      .orWhere('article.author_id LIKE :end', { end: `%,${idString}` })
+      .orderBy('article.id', 'DESC')
+      .take(10)
+      .getMany();
+  }
+
   async updateAnArticleById(id: number, updateArticleDto: UpdateArticleDto) {
     let errOnUpdate;
     let resOnUpdate;

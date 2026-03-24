@@ -40,6 +40,11 @@ export class ArticlesController {
     return await this.articleService.findArticleById(id);
   }
 
+  @Get('/researcher/:id')
+  async getAllArticlesByResearcherId(@Param('id', ParseIntPipe) id: number) {
+    return await this.articleService.findAllArticlesByResearcherId(id);
+  }
+
   // @Get('author/:id')
   // async getAllArticlesByAuthorId(@Param('id', ParseIntPipe) id: number) {
   //   return await this.articleService.findAllArticlesByAuthorId(id);
