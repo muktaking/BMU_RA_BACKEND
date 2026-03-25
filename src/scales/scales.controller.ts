@@ -93,11 +93,25 @@ export class ScalesController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Role(RolePermitted.researcher)
   @UsePipes(ValidationPipe)
+  @UseInterceptors(
+    FileInterceptor('pdf_file', {
+      storage: diskStorage({
+        destination: './uploads/scales',
+        filename: editFileName,
+      }),
+      fileFilter: pdfFileFilter,
+    }),
+  )
   async updateAnScaleById(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateScaleDto: UpdateScaleDto,
+    @Req() req,
   ) {
-    return await this.scalesService.updateAScaleById(id, updateScaleDto);
+    return await this.scalesService.updateAScaleById(
+      id,
+      updateScaleDto,
+      req.file.path,
+    );
   }
 
   @Delete(':id')
