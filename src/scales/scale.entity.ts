@@ -1,9 +1,9 @@
-import { Publication } from 'src/articles/article.entity';
+import { BasePublication } from 'src/articles/article.entity';
 import { Researcher } from 'src/researchers/researcher.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()
-export class Scale extends Publication {
+export class Scale extends BasePublication {
   @Column({ type: 'varchar', length: 25, nullable: false })
   short_title: string;
 

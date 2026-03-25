@@ -42,24 +42,17 @@ export class ScalesService {
     return researchers;
   }
 
-  async createAnScale(createScaleDto: CreateScaleDto) {
+  async createAnScale(createScaleDto: CreateScaleDto, filePath: string = '') {
+    console.log(filePath);
     const scale = new Scale();
-    const authors: Researcher[] = await this.findResearhcerByIds(
-      createScaleDto.author_id,
-    );
 
     const validators: Researcher[] = await this.findResearhcerByIds(
       createScaleDto.validator_id,
     );
 
     Object.assign(scale, createScaleDto);
-    scale.authors = authors;
     scale.validators = validators;
-
-    if (scale.author_id.length < 1) {
-      scale.author_id = createScaleDto.validator_id;
-      scale.author_name = createScaleDto.validator_name;
-    }
+    scale.server_link = filePath;
 
     const [err, resOnSave] = await to(this.scaleRepository.save(scale));
 
@@ -93,8 +86,6 @@ export class ScalesService {
             scale.validator_name = scalePartialData.validator_name;
             scale.validation_year = scalePartialData.validation_year;
             scale.description = scalePartialData.title;
-            scale.author_name = scalePartialData.author_name;
-            scale.author_id = scalePartialData.author_id;
             scale.publisher = scalePartialData.publisher
               ? scalePartialData.publisher
               : '';
@@ -161,15 +152,6 @@ export class ScalesService {
       throw new BadRequestException('Article is not present on the database.');
 
     Object.assign(scale, updateScaleDto); // update scale object with new values from updateScaleDto
-
-    //get researchers data due to save in authors (many-to-many) field
-    if (updateScaleDto?.author_id) {
-      const researchers: Researcher[] = await this.findResearhcerByIds(
-        updateScaleDto.author_id,
-      );
-
-      scale.authors = researchers;
-    }
 
     if (updateScaleDto?.validator_id) {
       const researchers: Researcher[] = await this.findResearhcerByIds(

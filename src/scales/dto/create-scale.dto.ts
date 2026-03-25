@@ -7,9 +7,9 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { PublicationDto } from 'src/articles/dto/create-article.dto';
+import { BasePublicationDto } from 'src/articles/dto/create-article.dto';
 
-export class CreateScaleDto extends PublicationDto {
+export class CreateScaleDto extends BasePublicationDto {
   @IsString()
   @MaxLength(25)
   short_title: string;

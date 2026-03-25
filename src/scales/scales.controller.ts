@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -24,7 +25,11 @@ import { Role } from 'src/roles.decorator';
 import { RolePermitted } from 'src/users/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { csvFileFilter, editFileName } from 'src/utils/files-uploading.utils';
+import {
+  csvFileFilter,
+  editFileName,
+  pdfFileFilter,
+} from 'src/utils/files-uploading.utils';
 
 @Controller('scales')
 export class ScalesController {
@@ -68,8 +73,20 @@ export class ScalesController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Role(RolePermitted.researcher)
   @UsePipes(ValidationPipe)
-  async createAnScale(@Body() createScaleDto: CreateScaleDto) {
-    return await this.scalesService.createAnScale(createScaleDto);
+  @UseInterceptors(
+    FileInterceptor('pdf_file', {
+      storage: diskStorage({
+        destination: './uploads/scales',
+        filename: editFileName,
+      }),
+      fileFilter: pdfFileFilter,
+    }),
+  )
+  async createAnScale(@Body() createScaleDto: CreateScaleDto, @Req() req) {
+    return await this.scalesService.createAnScale(
+      createScaleDto,
+      req.file.path,
+    );
   }
 
   @Patch(':id')

@@ -9,7 +9,7 @@ import {
   MaxLength,
 } from 'class-validator';
 
-export abstract class PublicationDto {
+export abstract class BasePublicationDto {
   @IsString()
   @MaxLength(255)
   title: string;
@@ -21,15 +21,6 @@ export abstract class PublicationDto {
   @IsString()
   @MaxLength(255)
   description: string;
-
-  @IsArray()
-  @IsNumber({}, { each: true })
-  @Type(() => Number)
-  author_id: Array<number>;
-
-  @IsArray()
-  @Type(() => String)
-  author_name: Array<string>;
 
   @IsOptional()
   @IsString()
@@ -56,6 +47,17 @@ export abstract class PublicationDto {
   @IsArray()
   //   @Transform(({ value }) => (Array.isArray(value) ? value.join(',') : value))
   tags: Array<string>;
+}
+
+export abstract class PublicationDto extends BasePublicationDto {
+  @IsArray()
+  @IsNumber({}, { each: true })
+  @Type(() => Number)
+  author_id: Array<number>;
+
+  @IsArray()
+  @Type(() => String)
+  author_name: Array<string>;
 }
 
 export class CreateArticleDto extends PublicationDto {

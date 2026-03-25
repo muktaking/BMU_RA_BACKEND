@@ -9,7 +9,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-export abstract class Publication extends BaseEntity {
+export abstract class BasePublication extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -18,16 +18,6 @@ export abstract class Publication extends BaseEntity {
 
   @Column({ type: 'varchar', length: 255, nullable: false })
   description: string;
-
-  @Column({ type: 'simple-array', nullable: false })
-  author_id: number[];
-
-  @Column({ type: 'simple-array', nullable: false })
-  author_name: string[];
-
-  @ManyToMany(() => Researcher)
-  @JoinTable()
-  authors: Researcher[];
 
   @Column({ type: 'varchar', length: 1024, nullable: true })
   publication_link: string;
@@ -50,6 +40,18 @@ export abstract class Publication extends BaseEntity {
 
   @Column({ type: 'simple-array', nullable: true })
   tags: string[];
+}
+
+export abstract class Publication extends BasePublication {
+  @Column({ type: 'simple-array', nullable: false })
+  author_id: number[];
+
+  @Column({ type: 'simple-array', nullable: false })
+  author_name: string[];
+
+  @ManyToMany(() => Researcher)
+  @JoinTable()
+  authors: Researcher[];
 }
 
 @Entity()

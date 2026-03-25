@@ -29,6 +29,13 @@ export const csvFileFilter = (req, file, callback) => {
   callback(null, true);
 };
 
+export const pdfFileFilter = (req, file, callback) => {
+  if (file.mimetype !== 'application/pdf') {
+    return callback(new Error('Only PDF files are allowed!'), false);
+  }
+  callback(null, true);
+};
+
 export const editFileName = (req, file, callback) => {
   const name: string = file.originalname.split('.')[0];
   const fileExtName: string = extname(file.originalname);
