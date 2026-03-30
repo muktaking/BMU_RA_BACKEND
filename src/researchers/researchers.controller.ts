@@ -8,6 +8,7 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -20,7 +21,11 @@ import { CreateResearcherDto } from './dto/create-researcher.dto';
 import { UpdateResearcherDto } from './dto/update-researcher.dto';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { diskStorage, Multer } from 'multer';
-import { csvFileFilter, editFileName } from 'src/utils/files-uploading.utils';
+import {
+  csvFileFilter,
+  editFileName,
+  imageFileFilter,
+} from 'src/utils/files-uploading.utils';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/roles.guard';
 import { Role } from 'src/roles.decorator';
@@ -75,21 +80,47 @@ export class ResearchersController {
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
-  async createResearcher(@Body() createResearcherDto: CreateResearcherDto) {
-    return await this.researchersService.createResearcher(createResearcherDto);
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: diskStorage({
+        destination: './uploads/avatars',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
+  async createResearcher(
+    @Body() createResearcherDto: CreateResearcherDto,
+    @Req() req,
+  ) {
+    return await this.researchersService.createResearcher(
+      createResearcherDto,
+      req.file.path,
+    );
   }
 
   @Patch(':id')
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Role(RolePermitted.moderator)
   @UsePipes(ValidationPipe)
+  @UseInterceptors(
+    FileInterceptor('avatar', {
+      storage: diskStorage({
+        destination: './uploads/avatars',
+        filename: editFileName,
+      }),
+      fileFilter: imageFileFilter,
+    }),
+  )
   async updateResearcherById(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateResearcherDto: UpdateResearcherDto,
+    @Req() req,
   ) {
     return await this.researchersService.updateResearcherById(
       id,
       updateResearcherDto,
+      req.file.path,
     );
   }
 

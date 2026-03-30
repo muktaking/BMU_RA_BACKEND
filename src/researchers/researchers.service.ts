@@ -92,18 +92,24 @@ export class ResearchersService {
     return researcher;
   }
 
-  async createResearcher(createResearcherDto: CreateResearcherDto) {
+  async createResearcher(
+    createResearcherDto: CreateResearcherDto,
+    filePath: string = 'neutral',
+  ) {
     const researcher = new Researcher();
     researcher.firstname = createResearcherDto.firstname;
     researcher.lastname = createResearcherDto.lastname;
     researcher.username = createResearcherDto.username;
-    researcher.avatar = 'neutral';
     researcher.email = createResearcherDto.email;
     researcher.gender = createResearcherDto.gender;
     researcher.phone = createResearcherDto.phone;
     researcher.degree = createResearcherDto.degree;
     researcher.institute = createResearcherDto.institute;
     researcher.address = createResearcherDto.address;
+    //if avater is not null
+
+    researcher.avatar = filePath;
+
     // if arrary of strings then join by comma, otherwise keep it as same
     researcher.publication = Array.isArray(createResearcherDto.publication)
       ? createResearcherDto.publication?.join(',')
@@ -163,7 +169,6 @@ export class ResearchersService {
             researcher.firstname = researcherPartialData.firstname;
             researcher.lastname = researcherPartialData.lastname;
             researcher.username = researcherPartialData.lastname?.toLowerCase();
-            researcher.avatar = 'neutral';
             researcher.email = researcherPartialData.email;
             researcher.gender = researcherPartialData.gender;
             researcher.phone = researcherPartialData.phone;
@@ -204,11 +209,16 @@ export class ResearchersService {
   async updateResearcherById(
     id: number,
     updateResearcherDto: UpdateResearcherDto,
+    filePath: string,
   ) {
     const [err, [researcher]] = await to(
       this.researcherRepository.findBy({ id: id }),
     );
     if (err) throw new InternalServerErrorException(err.message);
+
+    if (filePath !== '') {
+      researcher.avatar = filePath;
+    }
 
     if (updateResearcherDto.socialProfileResearcher) {
       if (researcher.socialProfiles?.length < 1) researcher.socialProfiles = []; // if user does not socialProfiles previously
@@ -237,10 +247,10 @@ export class ResearchersService {
 
     Object.assign(researcher, {
       ...updateResearcherDto,
-      publication: updateResearcherDto.publication?.join(','),
-      awards: updateResearcherDto.awards?.join(','),
-      int_affiliation: updateResearcherDto.int_affiliation?.join(','),
-      editor_in_Journal: updateResearcherDto.editor_in_Journal?.join(','),
+      publication: updateResearcherDto.publication,
+      awards: updateResearcherDto.awards,
+      int_affiliation: updateResearcherDto.int_affiliation,
+      editor_in_Journal: updateResearcherDto.editor_in_Journal,
     });
 
     const [errOnUpdate, resOnUpdate] = await to(
