@@ -2,4 +2,6 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/monergho/prabd-backend.monerghor.com/
-    - /bin/cp -R public/* $DEPLOYPATH
+    - /bin/cp -R dist $DEPLOYPATH
+    - /bin/cp -R package.json $DEPLOYPATH
+    - /bin/cp -R app.js $DEPLOYPATH
