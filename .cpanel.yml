@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/monergho/prabd-backend.monerghor.com/
+    - /bin/cp -R public/* $DEPLOYPATH
