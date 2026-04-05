@@ -2,11 +2,11 @@ import {
   BaseEntity,
   Column,
   Entity,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   Timestamp,
 } from 'typeorm';
+import { SocialProfile } from './social-profile.entity';
 
 export enum RolePermitted {
   guest = 0,
@@ -99,19 +99,19 @@ export class User extends Profile {
   socialProfiles: SocialProfile[];
 }
 
-export abstract class SocialProfileBase {
-  @PrimaryGeneratedColumn()
-  id: number;
+// export abstract class SocialProfileBase {
+//   @PrimaryGeneratedColumn()
+//   id: number;
 
-  @Column()
-  platform: string; // e.g., "facebook", "twitter"
+//   @Column()
+//   platform: string; // e.g., "facebook", "twitter"
 
-  @Column()
-  url: string;
-}
+//   @Column()
+//   url: string;
+// }
 
-@Entity()
-export class SocialProfile extends SocialProfileBase {
-  @ManyToOne(() => User, (user) => user.socialProfiles)
-  user: User;
-}
+// @Entity()
+// export class SocialProfile extends SocialProfileBase {
+//   @ManyToOne(() => User, (user) => user.socialProfiles)
+//   user: User;
+// }

@@ -2,10 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
-import * as config from 'config';
 import { join } from 'path';
-
-const baseSiteConfig = config.get('base_site');
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -19,7 +16,7 @@ async function bootstrap() {
 
   // 2. Configure CORS for Next.js
   app.enableCors({
-    origin: baseSiteConfig.url, // Your Next.js URL
+    origin: process.env.FRONTEND_URL, // Your Next.js URL
     credentials: true, // Essential for passing cookies
   });
   await app.listen(process.env.PORT ?? 5000);

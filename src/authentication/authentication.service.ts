@@ -8,10 +8,7 @@ import {
 import { UsersService } from 'src/users/users.service';
 import { compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
-import * as config from 'config';
 import { jwtPayload } from './jwt.interface';
-
-const jwtConfig = config.get('jwt');
 
 @Injectable()
 export class AuthenticationService {
@@ -46,7 +43,7 @@ export class AuthenticationService {
     return {
       accessToken,
       id: user.id,
-      expireIn: process.env.JWT_EXPIRESIN || jwtConfig.expiresIn,
+      expireIn: process.env.JWT_EXPIRESIN,
     };
   }
 }

@@ -5,12 +5,13 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User, SocialProfile } from './user.entity';
+import { User } from './user.entity';
 import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { to } from 'src/utils/utils';
+import { SocialProfile } from './social-profile.entity';
 
 @Injectable()
 export class UsersService {

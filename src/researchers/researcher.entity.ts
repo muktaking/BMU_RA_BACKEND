@@ -1,4 +1,5 @@
-import { Profile, SocialProfileBase } from 'src/users/user.entity';
+import { SocialProfileBase } from 'src/users/social-profile.entity';
+import { Profile } from 'src/users/user.entity';
 import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()

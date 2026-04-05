@@ -3,12 +3,9 @@ import { AuthenticationController } from './authentication.controller';
 import { AuthenticationService } from './authentication.service';
 import { UsersModule } from 'src/users/users.module';
 import { JwtModule } from '@nestjs/jwt';
-import * as config from 'config';
 import { PassportModule } from '@nestjs/passport';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
-
-const jwtConfig = config.get('jwt');
 
 @Module({
   controllers: [AuthenticationController],
@@ -17,9 +14,9 @@ const jwtConfig = config.get('jwt');
     PassportModule,
     UsersModule,
     JwtModule.register({
-      secret: process.env.JWT_SECRET || jwtConfig.secret,
+      secret: process.env.JWT_SECRET,
       signOptions: {
-        expiresIn: process.env.JWT_EXPIRESIN || jwtConfig.expiresIn + 's',
+        expiresIn: process.env.JWT_EXPIRESIN + 's',
       },
     }),
   ],
