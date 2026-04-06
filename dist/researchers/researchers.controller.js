@@ -45,7 +45,7 @@ let ResearchersController = class ResearchersController {
         return await this.researchersService.createResearcher(createResearcherDto, req.file.path);
     }
     async updateResearcherById(id, updateResearcherDto, req) {
-        return await this.researchersService.updateResearcherById(id, updateResearcherDto, req.file.path);
+        return await this.researchersService.updateResearcherById(id, updateResearcherDto, req.file?.path);
     }
     async deleteResearcherById(id) {
         return await this.researchersService.deleteResearcherById(id);

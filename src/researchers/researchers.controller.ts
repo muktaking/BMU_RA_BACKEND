@@ -120,7 +120,7 @@ export class ResearchersController {
     return await this.researchersService.updateResearcherById(
       id,
       updateResearcherDto,
-      req.file.path,
+      req.file?.path,
     );
   }
 

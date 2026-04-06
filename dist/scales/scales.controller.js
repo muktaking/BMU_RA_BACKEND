@@ -42,7 +42,7 @@ let ScalesController = class ScalesController {
         return await this.scalesService.createAnScale(createScaleDto, req.file.path);
     }
     async updateAnScaleById(id, updateScaleDto, req) {
-        return await this.scalesService.updateAScaleById(id, updateScaleDto, req.file.path);
+        return await this.scalesService.updateAScaleById(id, updateScaleDto, req.file?.path);
     }
     async deleteAScaleById(id) {
         return await this.scalesService.deleteAScaleById(id);

@@ -156,7 +156,10 @@ export class ScalesService {
       throw new BadRequestException('Article is not present on the database.');
 
     Object.assign(scale, updateScaleDto); // update scale object with new values from updateScaleDto
-    scale.server_link = filePath;
+
+    if (filePath !== '') {
+      scale.server_link = filePath;
+    }
 
     if (updateScaleDto?.validator_id) {
       const researchers: Researcher[] = await this.findResearhcerByIds(

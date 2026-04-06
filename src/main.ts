@@ -3,21 +3,20 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import { AppModule } from './app.module';
 import * as cookieParser from 'cookie-parser';
 import { join } from 'path';
+import { ConfigService } from '@nestjs/config';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  // 1. Enable Cookie Parser
+
+  // Get the config service
+  const configService = app.get(ConfigService);
+  const frontendUrl = configService.get<string>('FRONTEND_URL');
+
   app.use(cookieParser());
-
-  // Expose the 'uploads' folder publicly under the '/uploads' path
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), {
-    prefix: '/uploads',
-  });
-
-  // 2. Configure CORS for Next.js
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/uploads' });
   app.enableCors({
-    origin: process.env.FRONTEND_URL, // Your Next.js URL
-    credentials: true, // Essential for passing cookies
+    origin: frontendUrl, // Use the retrieved value
+    credentials: true,
   });
   await app.listen(process.env.PORT ?? 5000);
 }

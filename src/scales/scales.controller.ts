@@ -110,7 +110,7 @@ export class ScalesController {
     return await this.scalesService.updateAScaleById(
       id,
       updateScaleDto,
-      req.file.path,
+      req.file?.path,
     );
   }
 
