@@ -31,10 +31,12 @@ export class AuthenticationController {
     const authResult = await this.authentcationService.authenticateUser(
       req.user,
     );
+    const isProduction = process.env.NODE_ENV === 'production';
+
     res.cookie('access_token', authResult.accessToken, {
-      httpOnly: true,
+      httpOnly: isProduction, // True in production (HTTPS required)
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: isProduction ? 'none' : 'lax',
       maxAge: 1000 * 60 * 60 * 24, // 1 day
     });
 
