@@ -34,10 +34,11 @@ export class AuthenticationController {
     const isProduction = process.env.NODE_ENV === 'production';
 
     res.cookie('access_token', authResult.accessToken, {
-      httpOnly: isProduction, // True in production (HTTPS required)
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: isProduction ? 'none' : 'lax',
+      httpOnly: true, // Always true for security (prevents XSS), even in local dev
+      secure: isProduction, // true in production, false locally
+      sameSite: isProduction ? 'none' : 'lax', // 'none' for cross-domain prod, 'lax' for localhost dev
       maxAge: 1000 * 60 * 60 * 24, // 1 day
+      path: '/',
     });
 
     return {

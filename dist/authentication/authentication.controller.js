@@ -32,10 +32,11 @@ let AuthenticationController = class AuthenticationController {
         const authResult = await this.authentcationService.authenticateUser(req.user);
         const isProduction = process.env.NODE_ENV === 'production';
         res.cookie('access_token', authResult.accessToken, {
-            httpOnly: isProduction,
-            secure: process.env.NODE_ENV === 'production',
+            httpOnly: true,
+            secure: isProduction,
             sameSite: isProduction ? 'none' : 'lax',
             maxAge: 1000 * 60 * 60 * 24,
+            path: '/',
         });
         return {
             message: 'Success',
