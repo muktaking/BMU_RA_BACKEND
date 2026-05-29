@@ -108,7 +108,10 @@ export class ArticlesService {
 
   async findAllArticles(limit: number) {
     const [err, articles] = await to(
-      this.articleRepository.find({ take: limit, order: { id: 'DESC' } }),
+      this.articleRepository.find({
+        ...(limit > 0 && { take: limit }),
+        order: { id: 'DESC' },
+      }),
     );
 
     if (err)

@@ -108,7 +108,10 @@ export class ScalesService {
 
   async findAllScales(limit: number) {
     const [err, articles] = await to(
-      this.scaleRepository.find({ take: limit, order: { id: 'DESC' } }),
+      this.scaleRepository.find({
+        ...(limit > 0 && { take: limit }),
+        order: { id: 'DESC' },
+      }),
     );
 
     if (err)
