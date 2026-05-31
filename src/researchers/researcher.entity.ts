@@ -25,6 +25,9 @@ export class Researcher extends Profile {
     },
   )
   socialProfiles: SocialProfileResearcher[];
+
+  @Column()
+  createdById: number;
 }
 
 @Entity()

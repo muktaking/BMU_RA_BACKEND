@@ -41,20 +41,26 @@ export abstract class Profile extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 50, nullable: false })
-  firstname: string;
+  // @Column({ type: 'varchar', length: 50, nullable: false })
+  // firstname: string;
 
-  @Column({ type: 'varchar', length: 15, nullable: false })
-  lastname: string;
+  // @Column({ type: 'varchar', length: 15, nullable: false })
+  // lastname: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  name!: string;
 
   @Column({ type: 'varchar', length: 15, nullable: false })
   username: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  avatar: string;
+  avatar: string; // change it into image?: string and nullable: true
 
   @Column({ type: 'varchar', unique: true, nullable: false })
   email: string;
+
+  @Column({ type: 'tinyint', default: 0 })
+  emailVerified!: boolean;
 
   @Column({ type: 'enum', enum: Gender })
   gender: Gender;
@@ -73,6 +79,12 @@ export abstract class Profile extends BaseEntity {
 
   @Column({ type: 'text', nullable: true })
   address: string;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Timestamp;
+
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Timestamp;
 }
 
 @Entity()
@@ -82,15 +94,6 @@ export class User extends Profile {
 
   @Column({ type: 'enum', enum: RolePermitted, default: RolePermitted.member })
   role: RolePermitted;
-
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Timestamp;
-
-  @Column({ nullable: true })
-  resetToken: string;
-
-  @Column({ type: 'timestamp', nullable: true })
-  resetTokenExpiration: Timestamp;
 
   @OneToMany(() => SocialProfile, (socialProfile) => socialProfile.user, {
     cascade: true,
