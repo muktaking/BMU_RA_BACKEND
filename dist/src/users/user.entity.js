@@ -45,15 +45,19 @@ class Profile extends typeorm_1.BaseEntity {
     id;
     firstname;
     lastname;
+    name;
     username;
     avatar;
     email;
+    emailVerified;
     gender;
     phone;
     degree;
     designation;
     institute;
     address;
+    createdAt;
+    updatedAt;
 }
 exports.Profile = Profile;
 __decorate([
@@ -69,6 +73,10 @@ __decorate([
     __metadata("design:type", String)
 ], Profile.prototype, "lastname", void 0);
 __decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
+    __metadata("design:type", String)
+], Profile.prototype, "name", void 0);
+__decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 15, nullable: false }),
     __metadata("design:type", String)
 ], Profile.prototype, "username", void 0);
@@ -80,6 +88,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', unique: true, nullable: false }),
     __metadata("design:type", String)
 ], Profile.prototype, "email", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'tinyint', default: 0 }),
+    __metadata("design:type", Boolean)
+], Profile.prototype, "emailVerified", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: Gender }),
     __metadata("design:type", String)
@@ -104,12 +116,17 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'text', nullable: true }),
     __metadata("design:type", String)
 ], Profile.prototype, "address", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeorm_1.Timestamp)
+], Profile.prototype, "createdAt", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
+    __metadata("design:type", typeorm_1.Timestamp)
+], Profile.prototype, "updatedAt", void 0);
 let User = class User extends Profile {
     password;
     role;
-    createdAt;
-    resetToken;
-    resetTokenExpiration;
     socialProfiles;
 };
 exports.User = User;
@@ -121,18 +138,6 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: RolePermitted, default: RolePermitted.member }),
     __metadata("design:type", Number)
 ], User.prototype, "role", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' }),
-    __metadata("design:type", typeorm_1.Timestamp)
-], User.prototype, "createdAt", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ nullable: true }),
-    __metadata("design:type", String)
-], User.prototype, "resetToken", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'timestamp', nullable: true }),
-    __metadata("design:type", typeorm_1.Timestamp)
-], User.prototype, "resetTokenExpiration", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => social_profile_entity_1.SocialProfile, (socialProfile) => socialProfile.user, {
         cascade: true,

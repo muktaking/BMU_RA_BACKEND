@@ -29,21 +29,22 @@ export declare abstract class Profile extends BaseEntity {
     id: number;
     firstname: string;
     lastname: string;
+    name: string;
     username: string;
     avatar: string;
     email: string;
+    emailVerified: boolean;
     gender: Gender;
     phone: string;
     degree: string;
     designation: string;
     institute: Institute;
     address: string;
+    createdAt: Timestamp;
+    updatedAt: Timestamp;
 }
 export declare class User extends Profile {
     password: string;
     role: RolePermitted;
-    createdAt: Timestamp;
-    resetToken: string;
-    resetTokenExpiration: Timestamp;
     socialProfiles: SocialProfile[];
 }

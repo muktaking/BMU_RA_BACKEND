@@ -18,6 +18,9 @@ const authentication_module_1 = require("./authentication/authentication.module"
 const config_1 = require("@nestjs/config");
 const typeorm_1 = require("@nestjs/typeorm");
 const platform_express_1 = require("@nestjs/platform-express");
+const nestjs_better_auth_1 = require("@thallesp/nestjs-better-auth");
+const typeorm_2 = require("typeorm");
+const auth_1 = require("./authentication/auth");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -41,9 +44,22 @@ exports.AppModule = AppModule = __decorate([
                     username: configService.get('DATABASE_USER'),
                     password: configService.get('DATABASE_PASSWORD'),
                     database: configService.get('DATABASE_NAME'),
+                    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
                     autoLoadEntities: true,
                     synchronize: true,
                 }),
+            }),
+            nestjs_better_auth_1.AuthModule.forRootAsync({
+                isGlobal: true,
+                inject: [typeorm_2.DataSource, config_1.ConfigService],
+                useFactory: (dataSource, configService) => {
+                    const baseURL = configService.get('BETTER_AUTH_URL', 'http://localhost:3000');
+                    const secret = configService.get('BETTER_AUTH_SECRET', 'change-me');
+                    const client_url = configService.get('BETTER_AUTH_CLIENT_URL', 'http://localhost:3000');
+                    return {
+                        auth: (0, auth_1.createBetterAuth)({ dataSource, baseURL, secret, client_url }),
+                    };
+                },
             }),
             platform_express_1.MulterModule.register({
                 dest: './uploads',

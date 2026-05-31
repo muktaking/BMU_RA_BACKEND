@@ -19,6 +19,7 @@ let Researcher = class Researcher extends user_entity_1.Profile {
     int_affiliation;
     editor_in_Journal;
     socialProfiles;
+    createdById;
 };
 exports.Researcher = Researcher;
 __decorate([
@@ -44,6 +45,10 @@ __decorate([
     }),
     __metadata("design:type", Array)
 ], Researcher.prototype, "socialProfiles", void 0);
+__decorate([
+    (0, typeorm_1.Column)(),
+    __metadata("design:type", Number)
+], Researcher.prototype, "createdById", void 0);
 exports.Researcher = Researcher = __decorate([
     (0, typeorm_1.Entity)()
 ], Researcher);

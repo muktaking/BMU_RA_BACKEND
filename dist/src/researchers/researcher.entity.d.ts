@@ -6,6 +6,7 @@ export declare class Researcher extends Profile {
     int_affiliation: string;
     editor_in_Journal: string;
     socialProfiles: SocialProfileResearcher[];
+    createdById: number;
 }
 export declare class SocialProfileResearcher extends SocialProfileBase {
     researcher: Researcher;
