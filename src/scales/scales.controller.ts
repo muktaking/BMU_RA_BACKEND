@@ -30,16 +30,19 @@ import {
   editFileName,
   pdfFileFilter,
 } from 'src/utils/files-uploading.utils';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 
 @Controller('scales')
 export class ScalesController {
   constructor(private scalesService: ScalesService) {}
 
+  @AllowAnonymous()
   @Get(':id')
   async getArticleByid(@Param('id', ParseIntPipe) id: number) {
     return await this.scalesService.findArticleById(id);
   }
 
+  @AllowAnonymous()
   @Get()
   async getAllScales(@Query('limit', ParseIntPipe) limit: number) {
     return await this.scalesService.findAllScales(limit);

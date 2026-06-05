@@ -8,12 +8,14 @@ const config_1 = require("@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
-    const frontendUrl = configService.get('FRONTEND_URL');
+    const BETTER_AUTH_CLIENT_URL = configService.get('BETTER_AUTH_CLIENT_URL', 'http://localhost:3000');
     app.use(cookieParser());
     app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), { prefix: '/uploads' });
     app.enableCors({
-        origin: frontendUrl,
+        origin: [BETTER_AUTH_CLIENT_URL],
         credentials: true,
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+        allowedHeaders: 'Content-Type, Accept, Authorization',
     });
     await app.listen(process.env.PORT ?? 5000);
 }

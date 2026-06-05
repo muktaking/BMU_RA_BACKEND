@@ -3,7 +3,7 @@ import {
   Column,
   Entity,
   OneToMany,
-  PrimaryGeneratedColumn,
+  PrimaryColumn,
   Timestamp,
 } from 'typeorm';
 import { SocialProfile } from './social-profile.entity';
@@ -38,8 +38,8 @@ export enum Institute {
 }
 
 export abstract class Profile extends BaseEntity {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({ type: 'varchar', length: 255 })
+  id: string;
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   firstname: string;
@@ -48,13 +48,13 @@ export abstract class Profile extends BaseEntity {
   lastname: string;
 
   @Column({ type: 'varchar', length: 255 })
-  name!: string;
+  name!: string; //username
 
-  @Column({ type: 'varchar', length: 15, nullable: false })
-  username: string;
+  //@Column({ type: 'varchar', length: 15, nullable: false })
+  //username: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  avatar: string; // change it into image?: string and nullable: true
+  image: string; // change it into image?: string and nullable: true
 
   @Column({ type: 'varchar', unique: true, nullable: false })
   email: string;
@@ -89,8 +89,8 @@ export abstract class Profile extends BaseEntity {
 
 @Entity()
 export class User extends Profile {
-  @Column({ type: 'varchar', nullable: false })
-  password: string;
+  // @Column({ type: 'varchar', nullable: false })
+  // password: string;
 
   @Column({ type: 'enum', enum: RolePermitted, default: RolePermitted.member })
   role: RolePermitted;

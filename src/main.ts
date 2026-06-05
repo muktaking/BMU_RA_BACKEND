@@ -10,14 +10,21 @@ async function bootstrap() {
 
   // Get the config service
   const configService = app.get(ConfigService);
-  const frontendUrl = configService.get<string>('FRONTEND_URL');
+  const BETTER_AUTH_CLIENT_URL = configService.get<string>(
+    'BETTER_AUTH_CLIENT_URL',
+    'http://localhost:3000',
+  );
 
   app.use(cookieParser());
   app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/uploads' });
+
   app.enableCors({
-    origin: frontendUrl, // Use the retrieved value
+    origin: [BETTER_AUTH_CLIENT_URL],
     credentials: true,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
+    allowedHeaders: 'Content-Type, Accept, Authorization',
   });
+
   await app.listen(process.env.PORT ?? 5000);
 }
 bootstrap();

@@ -26,12 +26,11 @@ export declare enum Institute {
     local = 7
 }
 export declare abstract class Profile extends BaseEntity {
-    id: number;
+    id: string;
     firstname: string;
     lastname: string;
     name: string;
-    username: string;
-    avatar: string;
+    image: string;
     email: string;
     emailVerified: boolean;
     gender: Gender;
@@ -44,7 +43,6 @@ export declare abstract class Profile extends BaseEntity {
     updatedAt: Timestamp;
 }
 export declare class User extends Profile {
-    password: string;
     role: RolePermitted;
     socialProfiles: SocialProfile[];
 }

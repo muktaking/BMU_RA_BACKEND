@@ -59,14 +59,13 @@ let ResearchersService = class ResearchersService {
         const researcher = new researcher_entity_1.Researcher();
         researcher.firstname = createResearcherDto.firstname;
         researcher.lastname = createResearcherDto.lastname;
-        researcher.username = createResearcherDto.username;
         researcher.email = createResearcherDto.email;
         researcher.gender = createResearcherDto.gender;
         researcher.phone = createResearcherDto.phone;
         researcher.degree = createResearcherDto.degree;
         researcher.institute = createResearcherDto.institute;
         researcher.address = createResearcherDto.address;
-        researcher.avatar = filePath;
+        researcher.image = filePath;
         researcher.publication = Array.isArray(createResearcherDto.publication)
             ? createResearcherDto.publication?.join(',')
             : createResearcherDto.publication;

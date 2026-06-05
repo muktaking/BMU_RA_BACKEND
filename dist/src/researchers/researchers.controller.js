@@ -24,6 +24,7 @@ const passport_1 = require("@nestjs/passport");
 const roles_guard_1 = require("../roles.guard");
 const roles_decorator_1 = require("../roles.decorator");
 const user_entity_1 = require("../users/user.entity");
+const nestjs_better_auth_1 = require("@thallesp/nestjs-better-auth");
 let ResearchersController = class ResearchersController {
     researchersService;
     constructor(researchersService) {
@@ -53,6 +54,7 @@ let ResearchersController = class ResearchersController {
 };
 exports.ResearchersController = ResearchersController;
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('limit', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -60,13 +62,15 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ResearchersController.prototype, "getAllResearchers", null);
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)(':id'),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
+    __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], ResearchersController.prototype, "getResearhcerById", null);
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)('/institute/:institute_id'),
     __param(0, (0, common_1.Param)('institute_id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -120,11 +124,11 @@ __decorate([
         }),
         fileFilter: files_uploading_utils_1.imageFileFilter,
     })),
-    __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
+    __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __param(2, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number, update_researcher_dto_1.UpdateResearcherDto, Object]),
+    __metadata("design:paramtypes", [String, update_researcher_dto_1.UpdateResearcherDto, Object]),
     __metadata("design:returntype", Promise)
 ], ResearchersController.prototype, "updateResearcherById", null);
 __decorate([

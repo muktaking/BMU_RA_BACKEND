@@ -24,6 +24,7 @@ const user_entity_1 = require("../users/user.entity");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const files_uploading_utils_1 = require("../utils/files-uploading.utils");
+const nestjs_better_auth_1 = require("@thallesp/nestjs-better-auth");
 let ScalesController = class ScalesController {
     scalesService;
     constructor(scalesService) {
@@ -50,6 +51,7 @@ let ScalesController = class ScalesController {
 };
 exports.ScalesController = ScalesController;
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -57,6 +59,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ScalesController.prototype, "getArticleByid", null);
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('limit', common_1.ParseIntPipe)),
     __metadata("design:type", Function),

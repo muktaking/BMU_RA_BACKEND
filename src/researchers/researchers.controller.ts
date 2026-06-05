@@ -30,21 +30,25 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/roles.guard';
 import { Role } from 'src/roles.decorator';
 import { RolePermitted } from 'src/users/user.entity';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 
 @Controller('researchers')
 export class ResearchersController {
   constructor(private researchersService: ResearchersService) {}
 
+  @AllowAnonymous()
   @Get()
   async getAllResearchers(@Query('limit', ParseIntPipe) limit: number) {
     return await this.researchersService.findAllResearchersWithLimit(limit);
   }
 
+  @AllowAnonymous()
   @Get(':id')
-  async getResearhcerById(@Param('id', ParseIntPipe) id: number) {
+  async getResearhcerById(@Param('id') id: string) {
     return await this.researchersService.findResearhcerById(id);
   }
 
+  @AllowAnonymous()
   @Get('/institute/:institute_id')
   async getResearhcersByInstituteId(
     @Param('institute_id', ParseIntPipe) institute_Id: number,
@@ -113,7 +117,7 @@ export class ResearchersController {
     }),
   )
   async updateResearcherById(
-    @Param('id', ParseIntPipe) id: number,
+    @Param('id') id: string,
     @Body() updateResearcherDto: UpdateResearcherDto,
     @Req() req,
   ) {

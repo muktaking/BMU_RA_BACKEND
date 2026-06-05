@@ -17,7 +17,6 @@ const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("./user.entity");
 const typeorm_2 = require("typeorm");
-const bcryptjs_1 = require("bcryptjs");
 const utils_1 = require("../utils/utils");
 const social_profile_entity_1 = require("./social-profile.entity");
 let UsersService = class UsersService {
@@ -30,41 +29,6 @@ let UsersService = class UsersService {
         if (err)
             throw new common_1.InternalServerErrorException('User data could not be retrived due to server error.');
         return user[0];
-    }
-    async createUser(createUser) {
-        const user = new user_entity_1.User();
-        user.firstname = createUser.firstname;
-        user.lastname = createUser.lastname;
-        user.username = createUser.username;
-        user.avatar = 'neutral';
-        user.email = createUser.email;
-        user.gender = createUser.gender;
-        user.phone = createUser.phone;
-        user.degree = createUser.degree;
-        user.institute = createUser.institute;
-        user.address = createUser.address;
-        user.role = 1;
-        user.socialProfiles = [];
-        try {
-            createUser.socialProfile?.forEach((profile) => {
-                const sProfile = new social_profile_entity_1.SocialProfile();
-                sProfile.platform = profile.platform;
-                sProfile.url = profile.profileLink;
-                user.socialProfiles.push(sProfile);
-            });
-            const salt = await (0, bcryptjs_1.genSalt)(10);
-            user.password = await (0, bcryptjs_1.hash)(createUser.password, salt);
-            const userEntryRes = await this.userRepository.save(user);
-            return userEntryRes;
-        }
-        catch (error) {
-            console.log(error);
-            if (error.code === 'ER_DUP_ENTRY') {
-                throw new common_1.HttpException(`'${user.email}' is already exist.`, common_1.HttpStatus.CONFLICT);
-            }
-            else
-                throw new common_1.HttpException(error.message, common_1.HttpStatus.INTERNAL_SERVER_ERROR);
-        }
     }
     async updateUser(id, updateUserDto) {
         const [err, [user]] = await (0, utils_1.to)(this.userRepository.findBy({ id: id }));

@@ -24,6 +24,7 @@ const passport_1 = require("@nestjs/passport");
 const roles_guard_1 = require("../roles.guard");
 const roles_decorator_1 = require("../roles.decorator");
 const user_entity_1 = require("../users/user.entity");
+const nestjs_better_auth_1 = require("@thallesp/nestjs-better-auth");
 let ArticlesController = class ArticlesController {
     articleService;
     constructor(articleService) {
@@ -53,6 +54,7 @@ let ArticlesController = class ArticlesController {
 };
 exports.ArticlesController = ArticlesController;
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Query)('limit', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -60,6 +62,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ArticlesController.prototype, "getAllArticles", null);
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
@@ -67,6 +70,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], ArticlesController.prototype, "getArticleByid", null);
 __decorate([
+    (0, nestjs_better_auth_1.AllowAnonymous)(),
     (0, common_1.Get)('/researcher/:id'),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),

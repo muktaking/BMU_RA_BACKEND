@@ -46,8 +46,7 @@ class Profile extends typeorm_1.BaseEntity {
     firstname;
     lastname;
     name;
-    username;
-    avatar;
+    image;
     email;
     emailVerified;
     gender;
@@ -61,8 +60,8 @@ class Profile extends typeorm_1.BaseEntity {
 }
 exports.Profile = Profile;
 __decorate([
-    (0, typeorm_1.PrimaryGeneratedColumn)(),
-    __metadata("design:type", Number)
+    (0, typeorm_1.PrimaryColumn)({ type: 'varchar', length: 255 }),
+    __metadata("design:type", String)
 ], Profile.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: false }),
@@ -77,13 +76,9 @@ __decorate([
     __metadata("design:type", String)
 ], Profile.prototype, "name", void 0);
 __decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 15, nullable: false }),
-    __metadata("design:type", String)
-], Profile.prototype, "username", void 0);
-__decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: false }),
     __metadata("design:type", String)
-], Profile.prototype, "avatar", void 0);
+], Profile.prototype, "image", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', unique: true, nullable: false }),
     __metadata("design:type", String)
@@ -125,15 +120,10 @@ __decorate([
     __metadata("design:type", typeorm_1.Timestamp)
 ], Profile.prototype, "updatedAt", void 0);
 let User = class User extends Profile {
-    password;
     role;
     socialProfiles;
 };
 exports.User = User;
-__decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', nullable: false }),
-    __metadata("design:type", String)
-], User.prototype, "password", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: RolePermitted, default: RolePermitted.member }),
     __metadata("design:type", Number)

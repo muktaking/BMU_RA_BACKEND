@@ -13,6 +13,42 @@ const createBetterAuth = ({ dataSource, baseURL, secret, client_url, }) => {
             enabled: true,
         },
         trustedOrigins: [client_url],
+        user: {
+            additionalFields: {
+                firstname: { type: 'string' },
+                lastname: { type: 'string' },
+                phone: { type: 'string' },
+                degree: { type: 'string' },
+                institute: { type: 'number' },
+                gender: { type: 'string' },
+                address: { type: 'string' },
+            },
+        },
+        plugins: [
+            {
+                id: 'user-signup-modifier',
+                hooks: {
+                    before: [
+                        {
+                            matcher: (context) => context.path === '/sign-up/email',
+                            handler: async (context) => {
+                                if (!context.body) {
+                                    return;
+                                }
+                                const body = context.body;
+                                body.image = body.image || 'neutral';
+                                return {
+                                    context: {
+                                        ...context,
+                                        body,
+                                    },
+                                };
+                            },
+                        },
+                    ],
+                },
+            },
+        ],
     });
 };
 exports.createBetterAuth = createBetterAuth;

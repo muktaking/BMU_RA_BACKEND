@@ -55,9 +55,9 @@ export class AuthenticationController {
     return { message: 'Logged out successfully' };
   }
 
-  @Post('/registration')
-  @UsePipes(ValidationPipe)
-  async signUp(@Body() createUserDto: CreateUserDto) {
-    return await this.userService.createUser(createUserDto);
-  }
+  // @Post('/registration')
+  // @UsePipes(ValidationPipe)
+  // async signUp(@Body() createUserDto: CreateUserDto) {
+  //   return await this.userService.createUser(createUserDto);
+  // }
 }

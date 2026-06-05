@@ -4,7 +4,7 @@ export declare class UsersController {
     private userService;
     constructor(userService: UsersService);
     getUserByEmail(email: string): Promise<any>;
-    updateUser(id: number, updateUserDto: UpdateUserDto): Promise<{
+    updateUser(id: string, updateUserDto: UpdateUserDto): Promise<{
         message: string;
     }>;
     deleteUser(id: number): Promise<{

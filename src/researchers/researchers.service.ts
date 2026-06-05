@@ -48,7 +48,7 @@ export class ResearchersService {
     return researchers;
   }
 
-  async findResearhcerById(id: number) {
+  async findResearhcerById(id: string) {
     const [err, researcher] = await to(
       this.researcherRepository.findOneBy({ id: id }),
     );
@@ -99,7 +99,7 @@ export class ResearchersService {
     const researcher = new Researcher();
     researcher.firstname = createResearcherDto.firstname;
     researcher.lastname = createResearcherDto.lastname;
-    researcher.username = createResearcherDto.username;
+    //researcher.username = createResearcherDto.username;
     researcher.email = createResearcherDto.email;
     researcher.gender = createResearcherDto.gender;
     researcher.phone = createResearcherDto.phone;
@@ -108,7 +108,7 @@ export class ResearchersService {
     researcher.address = createResearcherDto.address;
     //if avater is not null
 
-    researcher.avatar = filePath;
+    researcher.image = filePath;
 
     // if arrary of strings then join by comma, otherwise keep it as same
     researcher.publication = Array.isArray(createResearcherDto.publication)
@@ -207,7 +207,7 @@ export class ResearchersService {
   }
 
   async updateResearcherById(
-    id: number,
+    id: string,
     updateResearcherDto: UpdateResearcherDto,
     filePath: string,
   ) {

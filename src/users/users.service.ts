@@ -32,52 +32,52 @@ export class UsersService {
 
   // Creating an user
 
-  async createUser(createUser: CreateUserDto) {
-    const user = new User();
-    user.firstname = createUser.firstname;
-    user.lastname = createUser.lastname;
-    user.username = createUser.username;
-    user.avatar = 'neutral';
-    user.email = createUser.email;
-    user.gender = createUser.gender;
-    user.phone = createUser.phone;
-    user.degree = createUser.degree;
-    user.institute = createUser.institute;
-    user.address = createUser.address;
-    user.role = 1;
-    user.socialProfiles = [];
+  // async createUser(createUser: CreateUserDto) {
+  //   const user = new User();
+  //   user.firstname = createUser.firstname;
+  //   user.lastname = createUser.lastname;
+  //   //user.username = createUser.username;
+  //   user.image = 'neutral';
+  //   user.email = createUser.email;
+  //   user.gender = createUser.gender;
+  //   user.phone = createUser.phone;
+  //   user.degree = createUser.degree;
+  //   user.institute = createUser.institute;
+  //   user.address = createUser.address;
+  //   user.role = 1;
+  //   user.socialProfiles = [];
 
-    try {
-      //intregating socialProfile
-      createUser.socialProfile?.forEach((profile) => {
-        const sProfile = new SocialProfile();
-        sProfile.platform = profile.platform;
-        sProfile.url = profile.profileLink;
-        user.socialProfiles.push(sProfile);
-      });
+  //   try {
+  //     //intregating socialProfile
+  //     createUser.socialProfile?.forEach((profile) => {
+  //       const sProfile = new SocialProfile();
+  //       sProfile.platform = profile.platform;
+  //       sProfile.url = profile.profileLink;
+  //       user.socialProfiles.push(sProfile);
+  //     });
 
-      //hashing password
-      const salt = await genSalt(10);
-      user.password = await hash(createUser.password, salt);
-      const userEntryRes = await this.userRepository.save(user);
-      return userEntryRes;
-    } catch (error) {
-      console.log(error);
-      if (error.code === 'ER_DUP_ENTRY') {
-        throw new HttpException(
-          `'${user.email}' is already exist.`,
-          HttpStatus.CONFLICT,
-        );
-        //throw new ConflictException(`Email: ['${email}'] is already exist.`);
-      } else
-        throw new HttpException(
-          error.message,
-          HttpStatus.INTERNAL_SERVER_ERROR,
-        );
-    }
-  }
+  //     //hashing password
+  //     const salt = await genSalt(10);
+  //     user.password = await hash(createUser.password, salt);
+  //     const userEntryRes = await this.userRepository.save(user);
+  //     return userEntryRes;
+  //   } catch (error) {
+  //     console.log(error);
+  //     if (error.code === 'ER_DUP_ENTRY') {
+  //       throw new HttpException(
+  //         `'${user.email}' is already exist.`,
+  //         HttpStatus.CONFLICT,
+  //       );
+  //       //throw new ConflictException(`Email: ['${email}'] is already exist.`);
+  //     } else
+  //       throw new HttpException(
+  //         error.message,
+  //         HttpStatus.INTERNAL_SERVER_ERROR,
+  //       );
+  //   }
+  // }
 
-  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+  async updateUser(id: string, updateUserDto: UpdateUserDto) {
     const [err, [user]] = await to(this.userRepository.findBy({ id: id }));
     if (err) throw new InternalServerErrorException(err.message);
 

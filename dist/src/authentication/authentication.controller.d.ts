@@ -1,5 +1,4 @@
 import { Response } from 'express';
-import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { UsersService } from 'src/users/users.service';
 import { AuthenticationService } from './authentication.service';
 export declare class AuthenticationController {
@@ -16,5 +15,4 @@ export declare class AuthenticationController {
     logout(res: Response): Promise<{
         message: string;
     }>;
-    signUp(createUserDto: CreateUserDto): Promise<import("src/users/user.entity").User>;
 }

@@ -14,7 +14,6 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthenticationController = void 0;
 const common_1 = require("@nestjs/common");
-const create_user_dto_1 = require("../users/dto/create-user.dto");
 const users_service_1 = require("../users/users.service");
 const authentication_service_1 = require("./authentication.service");
 const passport_1 = require("@nestjs/passport");
@@ -47,9 +46,6 @@ let AuthenticationController = class AuthenticationController {
         res.clearCookie('access_token');
         return { message: 'Logged out successfully' };
     }
-    async signUp(createUserDto) {
-        return await this.userService.createUser(createUserDto);
-    }
 };
 exports.AuthenticationController = AuthenticationController;
 __decorate([
@@ -70,14 +66,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthenticationController.prototype, "logout", null);
-__decorate([
-    (0, common_1.Post)('/registration'),
-    (0, common_1.UsePipes)(common_1.ValidationPipe),
-    __param(0, (0, common_1.Body)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [create_user_dto_1.CreateUserDto]),
-    __metadata("design:returntype", Promise)
-], AuthenticationController.prototype, "signUp", null);
 exports.AuthenticationController = AuthenticationController = __decorate([
     (0, common_1.Controller)('authentication'),
     __metadata("design:paramtypes", [users_service_1.UsersService,

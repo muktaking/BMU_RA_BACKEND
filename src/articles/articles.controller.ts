@@ -25,21 +25,25 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/roles.guard';
 import { Role } from 'src/roles.decorator';
 import { RolePermitted } from 'src/users/user.entity';
+import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
 
 @Controller('articles')
 export class ArticlesController {
   constructor(private articleService: ArticlesService) {}
 
+  @AllowAnonymous()
   @Get()
   async getAllArticles(@Query('limit', ParseIntPipe) limit: number) {
     return await this.articleService.findAllArticles(limit);
   }
 
+  @AllowAnonymous()
   @Get(':id')
   async getArticleByid(@Param('id', ParseIntPipe) id: number) {
     return await this.articleService.findArticleById(id);
   }
 
+  @AllowAnonymous()
   @Get('/researcher/:id')
   async getAllArticlesByResearcherId(@Param('id', ParseIntPipe) id: number) {
     return await this.articleService.findAllArticlesByResearcherId(id);
