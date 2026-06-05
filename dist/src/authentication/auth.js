@@ -2,7 +2,9 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.createBetterAuth = void 0;
 const better_auth_1 = require("better-auth");
+const plugins_1 = require("better-auth/plugins");
 const better_auth_typeorm_1 = require("@hedystia/better-auth-typeorm");
+const access_1 = require("./access");
 const createBetterAuth = ({ dataSource, baseURL, secret, client_url, }) => {
     return (0, better_auth_1.betterAuth)({
         database: (0, better_auth_typeorm_1.typeormAdapter)(dataSource),
@@ -48,6 +50,7 @@ const createBetterAuth = ({ dataSource, baseURL, secret, client_url, }) => {
                     ],
                 },
             },
+            (0, plugins_1.admin)({ ac: access_1.ac, roles: access_1.roles }),
         ],
     });
 };

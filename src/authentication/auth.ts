@@ -1,7 +1,9 @@
 // src/authentication/auth-instance.ts
 import { betterAuth } from 'better-auth';
+import { admin } from 'better-auth/plugins';
 import { typeormAdapter } from '@hedystia/better-auth-typeorm';
 import { DataSource } from 'typeorm';
+import { ac, roles } from './access';
 
 interface AuthConfigOptions {
   dataSource: DataSource;
@@ -71,6 +73,7 @@ export const createBetterAuth = ({
           ],
         },
       },
+      admin({ ac, roles }),
     ],
   });
 };

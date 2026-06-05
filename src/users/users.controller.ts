@@ -17,15 +17,15 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/roles.guard';
 import { User } from './user.decorator';
+import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 
 @Controller('users')
 export class UsersController {
   constructor(private userService: UsersService) {}
 
   @Get('/profile')
-  @UseGuards(AuthGuard('jwt'))
-  async getUserByEmail(@User('email') email: string) {
-    return await this.userService.findUserByEmail(email);
+  async getUserByEmail(@Session() session: UserSession) {
+    return await this.userService.findUserByEmail(session?.user?.email);
   }
 
   @Patch(':id')

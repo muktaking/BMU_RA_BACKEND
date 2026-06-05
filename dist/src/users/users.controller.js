@@ -16,15 +16,14 @@ exports.UsersController = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const update_user_dto_1 = require("./dto/update-user.dto");
-const passport_1 = require("@nestjs/passport");
-const user_decorator_1 = require("./user.decorator");
+const nestjs_better_auth_1 = require("@thallesp/nestjs-better-auth");
 let UsersController = class UsersController {
     userService;
     constructor(userService) {
         this.userService = userService;
     }
-    async getUserByEmail(email) {
-        return await this.userService.findUserByEmail(email);
+    async getUserByEmail(session) {
+        return await this.userService.findUserByEmail(session?.user?.email);
     }
     async updateUser(id, updateUserDto) {
         return await this.userService.updateUser(id, updateUserDto);
@@ -36,10 +35,9 @@ let UsersController = class UsersController {
 exports.UsersController = UsersController;
 __decorate([
     (0, common_1.Get)('/profile'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt')),
-    __param(0, (0, user_decorator_1.User)('email')),
+    __param(0, (0, nestjs_better_auth_1.Session)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "getUserByEmail", null);
 __decorate([
