@@ -159,7 +159,7 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
                     $Infer: {
                         body: {
                             userId: string;
-                            role: "admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest" | ("admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest")[];
+                            role: "member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest" | ("member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest")[];
                         };
                     };
                 };
@@ -248,7 +248,7 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
                             email: string;
                             password?: string | undefined;
                             name: string;
-                            role?: "admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest" | ("admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest")[] | undefined;
+                            role?: "member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest" | ("member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest")[] | undefined;
                             data?: Record<string, any> | undefined;
                         };
                     };
@@ -875,7 +875,7 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
                             };
                         } & {
                             userId?: string | undefined;
-                            role?: "admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest" | undefined;
+                            role?: "member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest" | undefined;
                         };
                     };
                 };

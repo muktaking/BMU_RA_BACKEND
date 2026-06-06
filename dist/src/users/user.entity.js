@@ -12,6 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.User = exports.Profile = exports.Institute = exports.Gender = exports.LoginProvider = exports.RolePermitted = void 0;
 const typeorm_1 = require("typeorm");
 const social_profile_entity_1 = require("./social-profile.entity");
+const Session_entity_1 = require("../authentication/Session.entity");
+const Account_entity_1 = require("../authentication/Account.entity");
 var RolePermitted;
 (function (RolePermitted) {
     RolePermitted[RolePermitted["guest"] = 0] = "guest";
@@ -121,20 +123,27 @@ __decorate([
 ], Profile.prototype, "updatedAt", void 0);
 let User = class User extends Profile {
     role;
+    sessions;
+    accounts;
     socialProfiles;
 };
 exports.User = User;
 __decorate([
-    (0, typeorm_1.Column)({ type: 'enum', enum: RolePermitted, default: RolePermitted.member }),
-    __metadata("design:type", Number)
+    (0, typeorm_1.Column)({ type: 'varchar', default: 'member' }),
+    __metadata("design:type", String)
 ], User.prototype, "role", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => social_profile_entity_1.SocialProfile, (socialProfile) => socialProfile.user, {
         cascade: true,
         eager: true,
     }),
+    (0, typeorm_1.OneToMany)(() => Session_entity_1.Session, (session) => session.user),
     __metadata("design:type", Array)
-], User.prototype, "socialProfiles", void 0);
+], User.prototype, "sessions", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => Account_entity_1.Account, (account) => account.user),
+    __metadata("design:type", Array)
+], User.prototype, "accounts", void 0);
 exports.User = User = __decorate([
     (0, typeorm_1.Entity)()
 ], User);

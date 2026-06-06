@@ -7,6 +7,8 @@ import {
   Timestamp,
 } from 'typeorm';
 import { SocialProfile } from './social-profile.entity';
+import { Session as SessionEntity } from '../authentication/Session.entity';
+import { Account as AccountEntity } from '../authentication/Account.entity';
 
 export enum RolePermitted {
   guest = 0,
@@ -92,13 +94,22 @@ export class User extends Profile {
   // @Column({ type: 'varchar', nullable: false })
   // password: string;
 
-  @Column({ type: 'enum', enum: RolePermitted, default: RolePermitted.member })
-  role: RolePermitted;
+  // @Column({ type: 'enum', enum: RolePermitted, default: RolePermitted.member })
+  // role: RolePermitted;
+  // Crucial for your custom roles configuration
+
+  @Column({ type: 'varchar', default: 'member' })
+  role: string;
 
   @OneToMany(() => SocialProfile, (socialProfile) => socialProfile.user, {
     cascade: true,
     eager: true,
   })
+  @OneToMany(() => SessionEntity, (session) => session.user)
+  sessions: SessionEntity[];
+
+  @OneToMany(() => AccountEntity, (account) => account.user)
+  accounts: AccountEntity[];
   socialProfiles: SocialProfile[];
 }
 

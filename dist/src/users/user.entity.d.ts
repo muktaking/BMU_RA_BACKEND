@@ -1,5 +1,7 @@
 import { BaseEntity, Timestamp } from 'typeorm';
 import { SocialProfile } from './social-profile.entity';
+import { Session as SessionEntity } from '../authentication/Session.entity';
+import { Account as AccountEntity } from '../authentication/Account.entity';
 export declare enum RolePermitted {
     guest = 0,
     member = 1,
@@ -43,6 +45,8 @@ export declare abstract class Profile extends BaseEntity {
     updatedAt: Timestamp;
 }
 export declare class User extends Profile {
-    role: RolePermitted;
+    role: string;
+    sessions: SessionEntity[];
+    accounts: AccountEntity[];
     socialProfiles: SocialProfile[];
 }
