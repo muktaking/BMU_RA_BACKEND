@@ -10,7 +10,9 @@ async function bootstrap() {
     const configService = app.get(config_1.ConfigService);
     const BETTER_AUTH_CLIENT_URL = configService.get('BETTER_AUTH_CLIENT_URL', 'http://localhost:3000');
     app.use(cookieParser());
-    app.useStaticAssets((0, path_1.join)(__dirname, '..', 'uploads'), { prefix: '/uploads' });
+    app.useStaticAssets((0, path_1.join)(process.cwd(), 'uploads'), {
+        prefix: '/uploads/',
+    });
     app.enableCors({
         origin: [BETTER_AUTH_CLIENT_URL],
         credentials: true,

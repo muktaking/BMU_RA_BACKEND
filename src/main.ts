@@ -16,7 +16,10 @@ async function bootstrap() {
   );
 
   app.use(cookieParser());
-  app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/uploads' });
+  // app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/uploads' });
+  app.useStaticAssets(join(process.cwd(), 'uploads'), {
+    prefix: '/uploads/', // Ensure it has a trailing slash
+  });
 
   app.enableCors({
     origin: [BETTER_AUTH_CLIENT_URL],

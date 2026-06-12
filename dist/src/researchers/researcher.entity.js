@@ -14,14 +14,18 @@ const social_profile_entity_1 = require("../users/social-profile.entity");
 const user_entity_1 = require("../users/user.entity");
 const typeorm_1 = require("typeorm");
 let Researcher = class Researcher extends user_entity_1.Profile {
+    id;
     publication;
     awards;
     int_affiliation;
     editor_in_Journal;
     socialProfiles;
-    createdById;
 };
 exports.Researcher = Researcher;
+__decorate([
+    (0, typeorm_1.PrimaryGeneratedColumn)(),
+    __metadata("design:type", String)
+], Researcher.prototype, "id", void 0);
 __decorate([
     (0, typeorm_1.Column)({ nullable: true }),
     __metadata("design:type", String)
@@ -45,10 +49,6 @@ __decorate([
     }),
     __metadata("design:type", Array)
 ], Researcher.prototype, "socialProfiles", void 0);
-__decorate([
-    (0, typeorm_1.Column)(),
-    __metadata("design:type", Number)
-], Researcher.prototype, "createdById", void 0);
 exports.Researcher = Researcher = __decorate([
     (0, typeorm_1.Entity)()
 ], Researcher);

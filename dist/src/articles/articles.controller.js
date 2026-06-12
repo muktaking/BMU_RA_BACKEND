@@ -20,10 +20,6 @@ const update_article_dto_1 = require("./dto/update-article.dto");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const files_uploading_utils_1 = require("../utils/files-uploading.utils");
-const passport_1 = require("@nestjs/passport");
-const roles_guard_1 = require("../roles.guard");
-const roles_decorator_1 = require("../roles.decorator");
-const user_entity_1 = require("../users/user.entity");
 const nestjs_better_auth_1 = require("@thallesp/nestjs-better-auth");
 let ArticlesController = class ArticlesController {
     articleService;
@@ -79,8 +75,7 @@ __decorate([
 ], ArticlesController.prototype, "getAllArticlesByResearcherId", null);
 __decorate([
     (0, common_1.Post)('/upload/csv'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.moderator),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
             destination: './uploads/files',
@@ -96,8 +91,7 @@ __decorate([
 ], ArticlesController.prototype, "createArticlesByUploadByCSV", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.researcher),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -106,8 +100,7 @@ __decorate([
 ], ArticlesController.prototype, "createAnArticle", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.researcher),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __param(1, (0, common_1.Body)()),
@@ -117,8 +110,7 @@ __decorate([
 ], ArticlesController.prototype, "updateAnArticleById", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.researcher),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'researcher']),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

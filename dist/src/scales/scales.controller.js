@@ -17,10 +17,6 @@ const common_1 = require("@nestjs/common");
 const scales_service_1 = require("./scales.service");
 const create_scale_dto_1 = require("./dto/create-scale.dto");
 const update_scale_dto_1 = require("./dto/update-scale.dto");
-const passport_1 = require("@nestjs/passport");
-const roles_guard_1 = require("../roles.guard");
-const roles_decorator_1 = require("../roles.decorator");
-const user_entity_1 = require("../users/user.entity");
 const platform_express_1 = require("@nestjs/platform-express");
 const multer_1 = require("multer");
 const files_uploading_utils_1 = require("../utils/files-uploading.utils");
@@ -40,7 +36,7 @@ let ScalesController = class ScalesController {
         return await this.scalesService.createScalesByUploadByCSV(res, file);
     }
     async createAnScale(createScaleDto, req) {
-        return await this.scalesService.createAnScale(createScaleDto, req.file.path);
+        return await this.scalesService.createAnScale(createScaleDto, req?.file?.path);
     }
     async updateAnScaleById(id, updateScaleDto, req) {
         return await this.scalesService.updateAScaleById(id, updateScaleDto, req.file?.path);
@@ -68,8 +64,7 @@ __decorate([
 ], ScalesController.prototype, "getAllScales", null);
 __decorate([
     (0, common_1.Post)('/upload/csv'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.moderator),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('file', {
         storage: (0, multer_1.diskStorage)({
             destination: './uploads/files',
@@ -85,8 +80,7 @@ __decorate([
 ], ScalesController.prototype, "createScalesByUploadByCSV", null);
 __decorate([
     (0, common_1.Post)(),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.researcher),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf_file', {
         storage: (0, multer_1.diskStorage)({
@@ -103,8 +97,7 @@ __decorate([
 ], ScalesController.prototype, "createAnScale", null);
 __decorate([
     (0, common_1.Patch)(':id'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.researcher),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
     (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('pdf_file', {
         storage: (0, multer_1.diskStorage)({
@@ -122,8 +115,7 @@ __decorate([
 ], ScalesController.prototype, "updateAnScaleById", null);
 __decorate([
     (0, common_1.Delete)(':id'),
-    (0, common_1.UseGuards)((0, passport_1.AuthGuard)('jwt'), roles_guard_1.RolesGuard),
-    (0, roles_decorator_1.Role)(user_entity_1.RolePermitted.researcher),
+    (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator']),
     __param(0, (0, common_1.Param)('id', common_1.ParseIntPipe)),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),

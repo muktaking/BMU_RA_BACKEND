@@ -40,17 +40,11 @@ export enum Institute {
 }
 
 export abstract class Profile extends BaseEntity {
-  @PrimaryColumn({ type: 'varchar', length: 255 })
-  id: string;
-
   @Column({ type: 'varchar', length: 50, nullable: false })
   firstname: string;
 
   @Column({ type: 'varchar', length: 15, nullable: false })
   lastname: string;
-
-  @Column({ type: 'varchar', length: 255 })
-  name!: string; //username
 
   //@Column({ type: 'varchar', length: 15, nullable: false })
   //username: string;
@@ -97,6 +91,11 @@ export class User extends Profile {
   // @Column({ type: 'enum', enum: RolePermitted, default: RolePermitted.member })
   // role: RolePermitted;
   // Crucial for your custom roles configuration
+  @PrimaryColumn({ type: 'varchar', length: 255 })
+  id: string;
+
+  @Column({ type: 'varchar', length: 255 })
+  name!: string; //username
 
   @Column({ type: 'varchar', default: 'member' })
   role: string;

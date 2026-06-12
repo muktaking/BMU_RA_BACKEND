@@ -44,10 +44,8 @@ var Institute;
     Institute[Institute["local"] = 7] = "local";
 })(Institute || (exports.Institute = Institute = {}));
 class Profile extends typeorm_1.BaseEntity {
-    id;
     firstname;
     lastname;
-    name;
     image;
     email;
     emailVerified;
@@ -62,10 +60,6 @@ class Profile extends typeorm_1.BaseEntity {
 }
 exports.Profile = Profile;
 __decorate([
-    (0, typeorm_1.PrimaryColumn)({ type: 'varchar', length: 255 }),
-    __metadata("design:type", String)
-], Profile.prototype, "id", void 0);
-__decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 50, nullable: false }),
     __metadata("design:type", String)
 ], Profile.prototype, "firstname", void 0);
@@ -73,10 +67,6 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 15, nullable: false }),
     __metadata("design:type", String)
 ], Profile.prototype, "lastname", void 0);
-__decorate([
-    (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
-    __metadata("design:type", String)
-], Profile.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', length: 255, nullable: false }),
     __metadata("design:type", String)
@@ -122,12 +112,22 @@ __decorate([
     __metadata("design:type", typeorm_1.Timestamp)
 ], Profile.prototype, "updatedAt", void 0);
 let User = class User extends Profile {
+    id;
+    name;
     role;
     sessions;
     accounts;
     socialProfiles;
 };
 exports.User = User;
+__decorate([
+    (0, typeorm_1.PrimaryColumn)({ type: 'varchar', length: 255 }),
+    __metadata("design:type", String)
+], User.prototype, "id", void 0);
+__decorate([
+    (0, typeorm_1.Column)({ type: 'varchar', length: 255 }),
+    __metadata("design:type", String)
+], User.prototype, "name", void 0);
 __decorate([
     (0, typeorm_1.Column)({ type: 'varchar', default: 'member' }),
     __metadata("design:type", String)

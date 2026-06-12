@@ -1,9 +1,18 @@
 import { SocialProfileBase } from 'src/users/social-profile.entity';
 import { Profile } from 'src/users/user.entity';
-import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class Researcher extends Profile {
+  @PrimaryGeneratedColumn()
+  id: string;
+
   @Column({ nullable: true })
   publication: string;
 
@@ -26,8 +35,8 @@ export class Researcher extends Profile {
   )
   socialProfiles: SocialProfileResearcher[];
 
-  @Column()
-  createdById: number;
+  // @Column()
+  // createdById: number;
 }
 
 @Entity()

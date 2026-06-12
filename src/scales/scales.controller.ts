@@ -30,7 +30,7 @@ import {
   editFileName,
   pdfFileFilter,
 } from 'src/utils/files-uploading.utils';
-import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
+import { AllowAnonymous, Roles } from '@thallesp/nestjs-better-auth';
 
 @Controller('scales')
 export class ScalesController {
@@ -54,8 +54,7 @@ export class ScalesController {
   // }
 
   @Post('/upload/csv')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -73,8 +72,7 @@ export class ScalesController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.researcher)
+  @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileInterceptor('pdf_file', {
@@ -88,13 +86,12 @@ export class ScalesController {
   async createAnScale(@Body() createScaleDto: CreateScaleDto, @Req() req) {
     return await this.scalesService.createAnScale(
       createScaleDto,
-      req.file.path,
+      req?.file?.path,
     );
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.researcher)
+  @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileInterceptor('pdf_file', {
@@ -118,8 +115,7 @@ export class ScalesController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.researcher)
+  @Roles(['admin', 'coordinator'])
   async deleteAScaleById(@Param('id', ParseIntPipe) id: number) {
     return await this.scalesService.deleteAScaleById(id);
   }

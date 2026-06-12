@@ -19,7 +19,7 @@ import {
 import { ResearchersService } from './researchers.service';
 import { CreateResearcherDto } from './dto/create-researcher.dto';
 import { UpdateResearcherDto } from './dto/update-researcher.dto';
-import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage, Multer } from 'multer';
 import {
   csvFileFilter,
@@ -30,7 +30,12 @@ import { AuthGuard } from '@nestjs/passport';
 import { RolesGuard } from 'src/roles.guard';
 import { Role } from 'src/roles.decorator';
 import { RolePermitted } from 'src/users/user.entity';
-import { AllowAnonymous } from '@thallesp/nestjs-better-auth';
+import {
+  AllowAnonymous,
+  Roles,
+  Session,
+  UserSession,
+} from '@thallesp/nestjs-better-auth';
 
 @Controller('researchers')
 export class ResearchersController {
@@ -59,8 +64,7 @@ export class ResearchersController {
   }
 
   @Post('/upload/csv')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
@@ -81,8 +85,7 @@ export class ResearchersController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileInterceptor('avatar', {
@@ -104,8 +107,7 @@ export class ResearchersController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.moderator)
+  @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UsePipes(ValidationPipe)
   @UseInterceptors(
     FileInterceptor('avatar', {
@@ -129,8 +131,7 @@ export class ResearchersController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Role(RolePermitted.coordinator)
+  @Roles(['admin', 'coordinator'])
   async deleteResearcherById(@Param('id', ParseIntPipe) id: number) {
     return await this.researchersService.deleteResearcherById(id);
   }
