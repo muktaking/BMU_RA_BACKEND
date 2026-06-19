@@ -45,6 +45,10 @@
     "sharp": "^0.34.3",
     "typeorm": "^0.3.24"
   },
+  "overrides": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-runtime": "^7.29.0"
+  },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.18.0",
