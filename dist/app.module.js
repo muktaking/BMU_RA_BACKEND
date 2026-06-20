@@ -53,9 +53,9 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
                 inject: [typeorm_2.DataSource, config_1.ConfigService],
                 useFactory: (dataSource, configService) => {
-                    const baseURL = configService.get('BETTER_AUTH_URL', 'http://localhost:3000');
-                    const secret = configService.get('BETTER_AUTH_SECRET', 'change-me');
-                    const client_url = configService.get('BETTER_AUTH_CLIENT_URL', 'http://localhost:3000');
+                    const baseURL = configService.get('BETTER_AUTH_URL');
+                    const secret = configService.get('BETTER_AUTH_SECRET');
+                    const client_url = configService.get('BETTER_AUTH_CLIENT_URL');
                     return {
                         auth: (0, auth_1.createBetterAuth)({ dataSource, baseURL, secret, client_url }),
                     };

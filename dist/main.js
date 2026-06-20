@@ -11,7 +11,10 @@ const config_1 = require("@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
-    const BETTER_AUTH_CLIENT_URL = configService.get('BETTER_AUTH_CLIENT_URL', 'http://localhost:3000');
+    const BETTER_AUTH_CLIENT_URL = configService.get('BETTER_AUTH_CLIENT_URL');
+    if (!BETTER_AUTH_CLIENT_URL) {
+        throw new Error('FATAL: BETTER_AUTH_CLIENT_URL environment variable is missing!');
+    }
     app.use((0, cookie_parser_1.default)());
     app.useStaticAssets((0, path_1.join)(process.cwd(), 'uploads'), {
         prefix: '/uploads/',

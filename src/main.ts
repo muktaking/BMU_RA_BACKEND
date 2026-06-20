@@ -12,8 +12,13 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const BETTER_AUTH_CLIENT_URL = configService.get<string>(
     'BETTER_AUTH_CLIENT_URL',
-    'http://localhost:3000',
   );
+  // Add this check before app.use(...)
+  if (!BETTER_AUTH_CLIENT_URL) {
+    throw new Error(
+      'FATAL: BETTER_AUTH_CLIENT_URL environment variable is missing!',
+    );
+  }
 
   app.use(cookieParser());
   // app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/uploads' });

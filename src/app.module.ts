@@ -46,18 +46,9 @@ import { createBetterAuth } from './authentication/auth';
       isGlobal: true,
       inject: [DataSource, ConfigService], // <-- NestJS gathers these instances
       useFactory: (dataSource: DataSource, configService: ConfigService) => {
-        const baseURL = configService.get<string>(
-          'BETTER_AUTH_URL',
-          'http://localhost:3000',
-        );
-        const secret = configService.get<string>(
-          'BETTER_AUTH_SECRET',
-          'change-me',
-        );
-        const client_url = configService.get<string>(
-          'BETTER_AUTH_CLIENT_URL',
-          'http://localhost:3000',
-        );
+        const baseURL = configService.get<string>('BETTER_AUTH_URL')!;
+        const secret = configService.get<string>('BETTER_AUTH_SECRET')!;
+        const client_url = configService.get<string>('BETTER_AUTH_CLIENT_URL')!;
         // Pass them directly into your separate factory configuration block
         return {
           auth: createBetterAuth({ dataSource, baseURL, secret, client_url }),
