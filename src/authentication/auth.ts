@@ -1,4 +1,4 @@
-// src/authentication/auth-instance.ts
+// @/authentication/auth-instance.ts
 import { betterAuth } from 'better-auth';
 import { admin } from 'better-auth/plugins';
 import { typeormAdapter } from '@hedystia/better-auth-typeorm';
@@ -39,6 +39,23 @@ export const createBetterAuth = ({
         address: { type: 'string' },
       },
     },
+    // 1. ADD THIS: Intercept at the database level right before the write happens
+    databaseHooks: {
+      user: {
+        create: {
+          before: async (user) => {
+            return {
+              data: {
+                ...user,
+                // Force "member" if Better-Auth tries to pass "user" or leaves it blank
+                role: user.role === 'user' || !user.role ? 'member' : user.role,
+                image: user.image || 'neutral',
+              },
+            };
+          },
+        },
+      },
+    },
     // Map or intercept fields globally using hooks
     plugins: [
       {
@@ -73,6 +90,7 @@ export const createBetterAuth = ({
           ],
         },
       },
+
       admin({ ac, roles }),
     ],
   });

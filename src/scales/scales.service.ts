@@ -5,15 +5,15 @@ import {
   Injectable,
   InternalServerErrorException,
 } from '@nestjs/common';
-import * as csv from 'csv-parser';
-import * as fs from 'fs';
+import csv from 'csv-parser';
+import fs from 'fs';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Scale } from './scale.entity';
 import { In, Repository } from 'typeorm';
 import { CreateScaleDto } from './dto/create-scale.dto';
-import { to } from 'src/utils/utils';
+import { to } from '@/utils/utils';
 import { UpdateScaleDto } from './dto/update-scale.dto';
-import { Researcher } from 'src/researchers/researcher.entity';
+import { Researcher } from '@/researchers/researcher.entity';
 
 @Injectable()
 export class ScalesService {

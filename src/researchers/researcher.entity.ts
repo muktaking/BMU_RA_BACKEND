@@ -1,5 +1,5 @@
-import { SocialProfileBase } from 'src/users/social-profile.entity';
-import { Profile } from 'src/users/user.entity';
+import { SocialProfileBase } from '@/users/social-profile.entity';
+import { Profile } from '@/users/user.entity';
 import {
   Column,
   Entity,

@@ -10,7 +10,7 @@ import { Repository } from 'typeorm';
 import { genSalt, hash } from 'bcryptjs';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { to } from 'src/utils/utils';
+import { to } from '../utils/utils';
 import { SocialProfile } from './social-profile.entity';
 
 @Injectable()
@@ -78,8 +78,10 @@ export class UsersService {
   // }
 
   async updateUser(id: string, updateUserDto: UpdateUserDto) {
-    const [err, [user]] = await to(this.userRepository.findBy({ id: id }));
+    const [err, users] = await to(this.userRepository.findBy({ id: id }));
     if (err) throw new InternalServerErrorException(err.message);
+
+    const [user] = users;
 
     if (updateUserDto.socialProfile) {
       if (user.socialProfiles?.length < 1) user.socialProfiles = []; // if user does not socialProfiles previously

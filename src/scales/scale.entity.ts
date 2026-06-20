@@ -1,5 +1,5 @@
-import { BasePublication } from 'src/articles/article.entity';
-import { Researcher } from 'src/researchers/researcher.entity';
+import { BasePublication } from '@/articles/article.entity';
+import { Researcher } from '@/researchers/researcher.entity';
 import { Column, Entity, JoinTable, ManyToMany } from 'typeorm';
 
 @Entity()

@@ -6,16 +6,16 @@ import {
 } from '@nestjs/common';
 import { In, Repository } from 'typeorm';
 import { Researcher, SocialProfileResearcher } from './researcher.entity';
-import { to } from 'src/utils/utils';
+import { to } from '@/utils/utils';
 import {
   CreateResearcherDto,
   SocialProfileResearcherDto,
 } from './dto/create-researcher.dto';
 import { UpdateResearcherDto } from './dto/update-researcher.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import * as csv from 'csv-parser';
-import * as fs from 'fs';
-import { SocialProfileDto } from 'src/users/dto/create-user.dto';
+import csv from 'csv-parser';
+import fs from 'fs';
+//import { SocialProfileDto } from '@/users/dto/create-user.dto';
 
 @Injectable()
 export class ResearchersService {
@@ -211,13 +211,15 @@ export class ResearchersService {
     updateResearcherDto: UpdateResearcherDto,
     filePath: string,
   ) {
-    const [err, [researcher]] = await to(
+    const [err, researchers] = await to(
       this.researcherRepository.findBy({ id: id }),
     );
     if (err) throw new InternalServerErrorException(err.message);
 
+    const [researcher] = researchers;
+
     if (filePath !== '') {
-      researcher.avatar = filePath;
+      researcher.image = filePath;
     }
 
     if (updateResearcherDto.socialProfileResearcher) {

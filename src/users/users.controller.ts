@@ -15,7 +15,7 @@ import {
 import { UsersService } from './users.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/roles.guard';
+import { RolesGuard } from '@/roles.guard';
 import { User } from './user.decorator';
 import { Session, UserSession } from '@thallesp/nestjs-better-auth';
 

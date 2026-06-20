@@ -7,7 +7,7 @@ import {
   IsString,
   MaxLength,
 } from 'class-validator';
-import { BasePublicationDto } from 'src/articles/dto/create-article.dto';
+import { BasePublicationDto } from '@/articles/dto/create-article.dto';
 
 export class CreateScaleDto extends BasePublicationDto {
   @IsString()

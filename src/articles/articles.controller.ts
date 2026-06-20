@@ -20,9 +20,9 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
-import { csvFileFilter, editFileName } from 'src/utils/files-uploading.utils';
+import { csvFileFilter, editFileName } from '@/utils/files-uploading.utils';
 import { AuthGuard } from '@nestjs/passport';
-import { RolePermitted } from 'src/users/user.entity';
+import { RolePermitted } from '@/users/user.entity';
 import { AllowAnonymous, Roles } from '@thallesp/nestjs-better-auth';
 
 @Controller('articles')

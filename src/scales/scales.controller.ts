@@ -20,16 +20,16 @@ import { ScalesService } from './scales.service';
 import { CreateScaleDto } from './dto/create-scale.dto';
 import { UpdateScaleDto } from './dto/update-scale.dto';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/roles.guard';
-import { Role } from 'src/roles.decorator';
-import { RolePermitted } from 'src/users/user.entity';
+import { RolesGuard } from '@/roles.guard';
+import { Role } from '@/roles.decorator';
+import { RolePermitted } from '@/users/user.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
 import {
   csvFileFilter,
   editFileName,
   pdfFileFilter,
-} from 'src/utils/files-uploading.utils';
+} from '@/utils/files-uploading.utils';
 import { AllowAnonymous, Roles } from '@thallesp/nestjs-better-auth';
 
 @Controller('scales')

@@ -25,11 +25,11 @@ import {
   csvFileFilter,
   editFileName,
   imageFileFilter,
-} from 'src/utils/files-uploading.utils';
+} from '@/utils/files-uploading.utils';
 import { AuthGuard } from '@nestjs/passport';
-import { RolesGuard } from 'src/roles.guard';
-import { Role } from 'src/roles.decorator';
-import { RolePermitted } from 'src/users/user.entity';
+import { RolesGuard } from '@/roles.guard';
+import { Role } from '@/roles.decorator';
+import { RolePermitted } from '@/users/user.entity';
 import {
   AllowAnonymous,
   Roles,

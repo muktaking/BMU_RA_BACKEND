@@ -9,11 +9,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Article } from './article.entity';
 import { In, Repository } from 'typeorm';
 import { CreateArticleDto } from './dto/create-article.dto';
-import { to } from 'src/utils/utils';
+import { to } from '@/utils/utils';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { Researcher } from 'src/researchers/researcher.entity';
-import * as csv from 'csv-parser';
-import * as fs from 'fs';
+import { Researcher } from '@/researchers/researcher.entity';
+import csv from 'csv-parser';
+import fs from 'fs';
 
 @Injectable()
 export class ArticlesService {

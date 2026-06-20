@@ -8,7 +8,7 @@ import {
   IsUrl,
   ValidateNested,
 } from 'class-validator';
-import { ProfileDto } from 'src/users/dto/create-user.dto';
+import { ProfileDto } from '@/users/dto/create-user.dto';
 
 export class CreateResearcherDto extends ProfileDto {
   @IsOptional()

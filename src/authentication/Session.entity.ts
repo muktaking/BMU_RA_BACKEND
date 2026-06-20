@@ -8,7 +8,7 @@ import {
   JoinColumn,
 } from 'typeorm';
 
-import { User as UserEntity } from '../users/user.entity';
+import { User as UserEntity } from '@/users/user.entity';
 
 @Entity('session')
 export class Session {
@@ -20,7 +20,7 @@ export class Session {
 
   @ManyToOne(() => UserEntity, (user) => user.sessions, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
-  user: UserEntity;
+  user!: UserEntity;
 
   @Column({ type: 'varchar', length: 255, unique: true })
   token!: string;

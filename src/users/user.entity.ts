@@ -41,46 +41,46 @@ export enum Institute {
 
 export abstract class Profile extends BaseEntity {
   @Column({ type: 'varchar', length: 50, nullable: false })
-  firstname: string;
+  firstname!: string;
 
   @Column({ type: 'varchar', length: 15, nullable: false })
-  lastname: string;
+  lastname!: string;
 
   //@Column({ type: 'varchar', length: 15, nullable: false })
   //username: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  image: string; // change it into image?: string and nullable: true
+  image!: string; // change it into image?: string and nullable: true
 
   @Column({ type: 'varchar', unique: true, nullable: false })
-  email: string;
+  email!: string;
 
   @Column({ type: 'tinyint', default: 0 })
   emailVerified!: boolean;
 
   @Column({ type: 'enum', enum: Gender })
-  gender: Gender;
+  gender!: Gender;
 
   @Column({ type: 'varchar', nullable: true })
-  phone: string;
+  phone!: string;
 
   @Column({ type: 'varchar', nullable: true })
-  degree: string;
+  degree!: string;
 
   @Column({ type: 'varchar', nullable: true })
-  designation: string;
+  designation!: string;
 
   @Column({ type: 'enum', enum: Institute })
-  institute: Institute;
+  institute!: Institute;
 
   @Column({ type: 'text', nullable: true })
-  address: string;
+  address!: string;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  createdAt: Timestamp;
+  createdAt!: Timestamp;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-  updatedAt: Timestamp;
+  updatedAt!: Timestamp;
 }
 
 @Entity()
@@ -92,24 +92,24 @@ export class User extends Profile {
   // role: RolePermitted;
   // Crucial for your custom roles configuration
   @PrimaryColumn({ type: 'varchar', length: 255 })
-  id: string;
+  id!: string;
 
   @Column({ type: 'varchar', length: 255 })
   name!: string; //username
 
   @Column({ type: 'varchar', default: 'member' })
-  role: string;
+  role!: string;
 
   @OneToMany(() => SocialProfile, (socialProfile) => socialProfile.user, {
     cascade: true,
     eager: true,
   })
   @OneToMany(() => SessionEntity, (session) => session.user)
-  sessions: SessionEntity[];
+  sessions!: SessionEntity[];
 
   @OneToMany(() => AccountEntity, (account) => account.user)
-  accounts: AccountEntity[];
-  socialProfiles: SocialProfile[];
+  accounts!: AccountEntity[];
+  socialProfiles!: SocialProfile[];
 }
 
 // export abstract class SocialProfileBase {

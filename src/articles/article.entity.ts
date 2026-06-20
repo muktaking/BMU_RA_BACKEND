@@ -1,4 +1,4 @@
-import { Researcher } from 'src/researchers/researcher.entity';
+import { Researcher } from '@/researchers/researcher.entity';
 import {
   BaseEntity,
   BeforeInsert,

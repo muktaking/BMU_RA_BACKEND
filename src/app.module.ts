@@ -36,7 +36,7 @@ import { createBetterAuth } from './authentication/auth';
         database: configService.get<string>('DATABASE_NAME'),
 
         // This is much safer for production builds 👇
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+        entities: [__dirname + '/**/*.entity{.ts,.js}'],
         autoLoadEntities: true,
         synchronize: true,
       }),
