@@ -8,10 +8,7 @@
     "target": "ES2023",
     "sourceMap": true,
     "outDir": "./dist",
-
-    // 1. Explicitly add this line to define the input root anchor
     "rootDir": "./src",
-
     "incremental": true,
     "skipLibCheck": true,
     "strictNullChecks": true,
@@ -25,5 +22,9 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*"]
+  // 1. Keep this include block
+  "include": ["src/**/*"],
+
+  // 2. ADD THIS EXCLUDE BLOCK HARD AGAINST THE ROOT OPTIONS
+  "exclude": ["node_modules", "dist", "test", "**/*spec.ts"]
 }

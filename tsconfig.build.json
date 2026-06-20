@@ -1,4 +1,16 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
+  "compilerOptions": {
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "incremental": false /* Disable incremental cache while debugging this */
+  },
+  "include": ["src/main.ts", "src/**/*"],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*",
+    "dist",
+    "test",
+    "**/*spec.ts"
+  ]
 }
