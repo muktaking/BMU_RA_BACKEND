@@ -48,7 +48,10 @@ import { createBetterAuth } from './authentication/auth';
       useFactory: (dataSource: DataSource, configService: ConfigService) => {
         const baseURL = configService.get<string>('BETTER_AUTH_URL')!;
         const secret = configService.get<string>('BETTER_AUTH_SECRET')!;
-        const client_url = configService.get<string>('BETTER_AUTH_CLIENT_URL')!;
+        const client_url = configService.get<string>(
+          'BETTER_AUTH_CLIENT_URL',
+          'https://prabd.monerghor.com',
+        )!;
         // Pass them directly into your separate factory configuration block
         return {
           auth: createBetterAuth({ dataSource, baseURL, secret, client_url }),

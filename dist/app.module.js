@@ -55,7 +55,7 @@ exports.AppModule = AppModule = __decorate([
                 useFactory: (dataSource, configService) => {
                     const baseURL = configService.get('BETTER_AUTH_URL');
                     const secret = configService.get('BETTER_AUTH_SECRET');
-                    const client_url = configService.get('BETTER_AUTH_CLIENT_URL');
+                    const client_url = configService.get('BETTER_AUTH_CLIENT_URL', 'https://prabd.monerghor.com');
                     return {
                         auth: (0, auth_1.createBetterAuth)({ dataSource, baseURL, secret, client_url }),
                     };

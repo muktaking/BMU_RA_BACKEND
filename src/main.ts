@@ -12,6 +12,7 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
   const BETTER_AUTH_CLIENT_URL = configService.get<string>(
     'BETTER_AUTH_CLIENT_URL',
+    'https://prabd.monerghor.com',
   );
   console.log(configService.get<string>('BETTER_AUTH_CLIENT_URL'));
   // Add this check before app.use(...)

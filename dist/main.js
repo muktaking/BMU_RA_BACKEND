@@ -11,7 +11,7 @@ const config_1 = require("@nestjs/config");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     const configService = app.get(config_1.ConfigService);
-    const BETTER_AUTH_CLIENT_URL = configService.get('BETTER_AUTH_CLIENT_URL');
+    const BETTER_AUTH_CLIENT_URL = configService.get('BETTER_AUTH_CLIENT_URL', 'https://prabd.monerghor.com');
     console.log(configService.get('BETTER_AUTH_CLIENT_URL'));
     if (!BETTER_AUTH_CLIENT_URL) {
         throw new Error('FATAL: BETTER_AUTH_CLIENT_URL environment variable is missing!');
