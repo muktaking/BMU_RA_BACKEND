@@ -46,7 +46,10 @@ import { createBetterAuth } from './authentication/auth';
       isGlobal: true,
       inject: [DataSource, ConfigService], // <-- NestJS gathers these instances
       useFactory: (dataSource: DataSource, configService: ConfigService) => {
-        const baseURL = configService.get<string>('BETTER_AUTH_URL')!;
+        const baseURL = configService.get<string>(
+          'BETTER_AUTH_URL',
+          'https://prabd-backend.monerghor.com',
+        )!;
         const secret = configService.get<string>('BETTER_AUTH_SECRET')!;
         const client_url = configService.get<string>(
           'BETTER_AUTH_CLIENT_URL',

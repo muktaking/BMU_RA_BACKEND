@@ -53,7 +53,7 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
                 inject: [typeorm_2.DataSource, config_1.ConfigService],
                 useFactory: (dataSource, configService) => {
-                    const baseURL = configService.get('BETTER_AUTH_URL');
+                    const baseURL = configService.get('BETTER_AUTH_URL', 'https://prabd-backend.monerghor.com');
                     const secret = configService.get('BETTER_AUTH_SECRET');
                     const client_url = configService.get('BETTER_AUTH_CLIENT_URL', 'https://prabd.monerghor.com');
                     return {
