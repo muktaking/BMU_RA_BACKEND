@@ -26,6 +26,9 @@ async function bootstrap() {
     prefix: '/uploads/', // Ensure it has a trailing slash
   });
 
+  // CRUCIAL FOR CPANEL: Tells Express to trust proxy routing headers
+  app.getHttpAdapter().getInstance().set('trust proxy', 1);
+
   app.enableCors({
     origin: [BETTER_AUTH_CLIENT_URL],
     credentials: true,

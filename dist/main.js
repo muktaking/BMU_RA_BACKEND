@@ -19,6 +19,7 @@ async function bootstrap() {
     app.useStaticAssets((0, path_1.join)(process.cwd(), 'uploads'), {
         prefix: '/uploads/',
     });
+    app.getHttpAdapter().getInstance().set('trust proxy', 1);
     app.enableCors({
         origin: [BETTER_AUTH_CLIENT_URL],
         credentials: true,
