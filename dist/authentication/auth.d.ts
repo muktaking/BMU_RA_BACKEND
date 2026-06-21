@@ -14,6 +14,16 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
         enabled: true;
     };
     trustedOrigins: string[];
+    advanced: {
+        crossSubDomainCookies: {
+            enabled: true;
+            domain: string;
+        };
+        defaultCookieAttributes: {
+            sameSite: "none";
+            secure: true;
+        };
+    };
     user: {
         additionalFields: {
             firstname: {

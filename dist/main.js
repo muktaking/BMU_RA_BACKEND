@@ -22,7 +22,7 @@ async function bootstrap() {
     });
     app.getHttpAdapter().getInstance().set('trust proxy', 1);
     app.enableCors({
-        origin: [BETTER_AUTH_CLIENT_URL],
+        origin: [BETTER_AUTH_CLIENT_URL, 'https://prabd.monerghor.com'],
         credentials: true,
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
         allowedHeaders: 'Content-Type, Accept, Authorization',
