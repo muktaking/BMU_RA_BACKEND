@@ -27,17 +27,19 @@ export const createBetterAuth = ({
       enabled: true,
     },
     // You can also map these strings out to env variables if needed
-    trustedOrigins: [client_url, 'https://prabd.monerghor.com'],
-    // advanced: {
-    //   crossSubDomainCookies: {
-    //     enabled: true,
-    //     domain: '.monerghor.com', // note the leading dot — shares cookie across subdomains
-    //   },
-    //   defaultCookieAttributes: {
-    //     sameSite: 'none', // required for cross-subdomain cookies
-    //     secure: true, // required when sameSite is "none"
-    //   },
-    // },
+    trustedOrigins: [client_url],
+    advanced: {
+      crossSubDomainCookies: {
+        enabled: true,
+        domain: '.monerghor.com',
+      },
+      defaultCookieAttributes: {
+        sameSite: 'none',
+        secure: true,
+        httpOnly: true,
+      },
+      useSecureCookies: true, // some versions need this explicitly
+    },
     user: {
       additionalFields: {
         firstname: { type: 'string' },
