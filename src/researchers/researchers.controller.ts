@@ -88,7 +88,7 @@ export class ResearchersController {
   @Roles(['admin', 'coordinator', 'moderator', 'researcher'])
   @UsePipes(ValidationPipe)
   @UseInterceptors(
-    FileInterceptor('avatar', {
+    FileInterceptor('image', {
       storage: diskStorage({
         destination: './uploads/avatars',
         filename: editFileName,
