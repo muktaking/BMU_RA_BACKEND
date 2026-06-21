@@ -16,15 +16,15 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
     trustedOrigins: string[];
     advanced: {
         crossSubDomainCookies: {
-            enabled: true;
-            domain: string;
+            enabled: boolean;
+            domain: string | undefined;
         };
         defaultCookieAttributes: {
-            sameSite: "none";
-            secure: true;
+            sameSite: "none" | "lax";
+            secure: boolean;
             httpOnly: true;
         };
-        useSecureCookies: true;
+        useSecureCookies: boolean;
     };
     user: {
         additionalFields: {
@@ -197,7 +197,7 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
                     $Infer: {
                         body: {
                             userId: string;
-                            role: "member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest" | ("member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest")[];
+                            role: "admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest" | ("admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest")[];
                         };
                     };
                 };
@@ -286,7 +286,7 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
                             email: string;
                             password?: string | undefined;
                             name: string;
-                            role?: "member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest" | ("member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest")[] | undefined;
+                            role?: "admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest" | ("admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest")[] | undefined;
                             data?: Record<string, any> | undefined;
                         };
                     };
@@ -913,7 +913,7 @@ export declare const createBetterAuth: ({ dataSource, baseURL, secret, client_ur
                             };
                         } & {
                             userId?: string | undefined;
-                            role?: "member" | "researcher" | "admin" | "coordinator" | "moderator" | "guest" | undefined;
+                            role?: "admin" | "coordinator" | "moderator" | "researcher" | "member" | "guest" | undefined;
                         };
                     };
                 };

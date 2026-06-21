@@ -32,7 +32,7 @@ export abstract class ProfileDto {
   @IsOptional()
   @IsString()
   @MaxLength(255)
-  avatar: string;
+  image: string;
 
   @IsEmail()
   email: string;

@@ -110,7 +110,7 @@ __decorate([
     (0, common_1.Patch)(':id'),
     (0, nestjs_better_auth_1.Roles)(['admin', 'coordinator', 'moderator', 'researcher']),
     (0, common_1.UsePipes)(common_1.ValidationPipe),
-    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('avatar', {
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('image', {
         storage: (0, multer_1.diskStorage)({
             destination: './uploads/avatars',
             filename: files_uploading_utils_1.editFileName,

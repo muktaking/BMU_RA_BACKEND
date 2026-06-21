@@ -17,7 +17,7 @@ class ProfileDto {
     firstname;
     lastname;
     username;
-    avatar;
+    image;
     email;
     gender;
     phone;
@@ -49,7 +49,7 @@ __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.MaxLength)(255),
     __metadata("design:type", String)
-], ProfileDto.prototype, "avatar", void 0);
+], ProfileDto.prototype, "image", void 0);
 __decorate([
     (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)

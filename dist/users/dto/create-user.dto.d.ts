@@ -3,7 +3,7 @@ export declare abstract class ProfileDto {
     firstname: string;
     lastname: string;
     username: string;
-    avatar: string;
+    image: string;
     email: string;
     gender: Gender;
     phone: string;

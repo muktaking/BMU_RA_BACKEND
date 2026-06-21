@@ -6,6 +6,7 @@ const plugins_1 = require("better-auth/plugins");
 const better_auth_typeorm_1 = require("@hedystia/better-auth-typeorm");
 const access_1 = require("./access");
 const createBetterAuth = ({ dataSource, baseURL, secret, client_url, }) => {
+    const isProduction = process.env.NODE_ENV === 'production';
     return (0, better_auth_1.betterAuth)({
         database: (0, better_auth_typeorm_1.typeormAdapter)(dataSource),
         baseURL: baseURL,
@@ -17,15 +18,15 @@ const createBetterAuth = ({ dataSource, baseURL, secret, client_url, }) => {
         trustedOrigins: [client_url],
         advanced: {
             crossSubDomainCookies: {
-                enabled: true,
-                domain: '.monerghor.com',
+                enabled: isProduction,
+                domain: isProduction ? '.monerghor.com' : undefined,
             },
             defaultCookieAttributes: {
-                sameSite: 'none',
-                secure: true,
+                sameSite: isProduction ? 'none' : 'lax',
+                secure: isProduction,
                 httpOnly: true,
             },
-            useSecureCookies: true,
+            useSecureCookies: isProduction,
         },
         user: {
             additionalFields: {

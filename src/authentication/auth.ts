@@ -18,6 +18,7 @@ export const createBetterAuth = ({
   secret,
   client_url,
 }: AuthConfigOptions) => {
+  const isProduction = process.env.NODE_ENV === 'production';
   return betterAuth({
     database: typeormAdapter(dataSource as any),
     baseURL: baseURL,
@@ -30,15 +31,15 @@ export const createBetterAuth = ({
     trustedOrigins: [client_url],
     advanced: {
       crossSubDomainCookies: {
-        enabled: true,
-        domain: '.monerghor.com',
+        enabled: isProduction, // Only enable on production
+        domain: isProduction ? '.monerghor.com' : undefined, // Omit domain for localhost
       },
       defaultCookieAttributes: {
-        sameSite: 'none',
-        secure: true,
+        sameSite: isProduction ? 'none' : 'lax', // 'lax' is required for local HTTP
+        secure: isProduction,
         httpOnly: true,
       },
-      useSecureCookies: true, // some versions need this explicitly
+      useSecureCookies: isProduction,
     },
     user: {
       additionalFields: {
