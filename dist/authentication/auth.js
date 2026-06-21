@@ -15,16 +15,6 @@ const createBetterAuth = ({ dataSource, baseURL, secret, client_url, }) => {
             enabled: true,
         },
         trustedOrigins: [client_url, 'https://prabd.monerghor.com'],
-        advanced: {
-            crossSubDomainCookies: {
-                enabled: true,
-                domain: '.monerghor.com',
-            },
-            defaultCookieAttributes: {
-                sameSite: 'none',
-                secure: true,
-            },
-        },
         user: {
             additionalFields: {
                 firstname: { type: 'string' },
